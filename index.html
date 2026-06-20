@@ -133,6 +133,20 @@
              floatTrain 2s ease-in-out infinite;
 }
 
+@keyframes moveTrain {
+  0% {
+    left: 110%;
+  }
+  100% {
+    left: -200px;
+  }
+}
+
+@keyframes floatTrain {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 @keyframes floatTrain {
   0%,100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
