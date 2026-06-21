@@ -123,19 +123,24 @@
   </a>
   </div>  <h2>⭐ Rate the Book</h2>  <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLScPO-WfHPqqgmosn17KAykWz2Ru7OkcJxZqqTM1D1oFT10Q-g/viewform?usp=publish-editor">
     Give Rating
-  <div class="train">🚂✨🌌</div>
-    .train {
+  <!-- 🚂 Space Train --><div class="train">
+  <div class="trainEmoji">🚂✨🌌</div>
+</div><style>
+.train {
   position: absolute;
   bottom: 50px;
-  left: -200px;
+  left: 110%;
+  animation: moveTrain 12s linear infinite;
+}
+
+.trainEmoji {
   font-size: 40px;
-  animation: moveTrain 12s linear infinite,
-             floatTrain 2s ease-in-out infinite;
+  animation: floatTrain 2s ease-in-out infinite;
 }
 
 @keyframes moveTrain {
   0% {
-    right: 110%;
+    left: 110%;
   }
   100% {
     left: -200px;
@@ -143,12 +148,12 @@
 }
 
 @keyframes floatTrain {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% {
+    transform: scaleX(-1) translateY(0);
+  }
+  50% {
+    transform: scaleX(-1) translateY(-10px);
+  }
 }
-
-@keyframes floatTrain {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
+</style>
   </html>
