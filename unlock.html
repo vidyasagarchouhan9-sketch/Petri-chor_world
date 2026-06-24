@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>🤐 Enter Secret Code</title>
+
+<style>
+body{
+background:black;
+color:white;
+font-family:Arial;
+text-align:center;
+padding-top:100px;
+}
+
+h1{
+color:#00f0ff;
+text-shadow:0 0 15px #00f0ff;
+}
+
+input{
+padding:15px;
+width:300px;
+font-size:18px;
+border-radius:10px;
+border:none;
+}
+
+button{
+padding:15px 25px;
+margin-top:20px;
+font-size:18px;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#00f0ff,#ff00ff);
+color:white;
+font-weight:bold;
+}
+
+a{
+display:inline-block;
+margin-top:30px;
+color:#00f0ff;
+text-decoration:none;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🤐 ENTER SECRET CODE</h1>
+
+<p>
+Only true Bot Hunters know the code...
+</p>
+
+<input
+id="code"
+placeholder="Enter Secret Code">
+
+<br>
+
+<button onclick="checkCode()">
+🔓 Unlock Certificate
+</button>
+
+<script>
+
+function checkCode(){
+
+if(document.getElementById("code").value==
+"P7-E3-T9-R4-I1-C8-H5-O6-R2-2-0-2-6")
+
+{
+
+window.location="certificate.html";
+
+}
+
+else{
+
+alert("❌ Incorrect Code!\nKeep searching for the bots.");
+
+}
+
+}
+
+</script>
+
+<br>
+
+<a href="game.html">
+⬅ Return to Game
+</a>
+
+</body>
+</html>
