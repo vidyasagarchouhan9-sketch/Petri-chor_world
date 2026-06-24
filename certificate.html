@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>🏆 Bot Hunter Certificate</title>
+
+<style>
+body{
+background:black;
+color:white;
+font-family:Arial;
+text-align:center;
+padding:20px;
+}
+
+h1{
+color:gold;
+}
+
+input{
+padding:12px;
+font-size:18px;
+border-radius:10px;
+}
+
+button{
+padding:12px 20px;
+font-size:18px;
+background:gold;
+border:none;
+border-radius:10px;
+font-weight:bold;
+}
+
+#certificate{
+margin-top:30px;
+padding:30px;
+border:8px solid gold;
+background:#111;
+border-radius:20px;
+display:none;
+}
+
+.code{
+color:cyan;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏆 BOT HUNTER CERTIFICATE</h1>
+
+<p>Enter your name:</p>
+
+<input id="name" placeholder="Your Name">
+
+<br><br>
+
+<button onclick="generateCertificate()">
+🏆 Generate Certificate
+</button>
+
+<div id="certificate">
+
+<h1>🏆 BOT HUNTER CERTIFICATE</h1>
+
+<h2>Awarded to</h2>
+
+<h1 id="readerName"></h1>
+
+<p>
+For successfully locating all 13 Security Bots
+aboard the Maharajas' Express.
+</p>
+
+<h2>🔐 VIP ACCESS CODE</h2>
+
+<h2 class="code">
+GXIII-2026-PETRI
+</h2>
+
+<p>
+🤖 Signed by Petri-Chor
+</p>
+
+<p>
+by Vidyasagar
+</p>
+
+</div>
+
+<script>
+
+function generateCertificate(){
+
+let name=document.getElementById("name").value;
+
+if(name==""){
+alert("Please enter your name.");
+return;
+}
+
+document.getElementById("readerName").innerHTML=name;
+
+document.getElementById("certificate").style.display="block";
+
+}
+
+</script>
+
+</body>
+</html>
