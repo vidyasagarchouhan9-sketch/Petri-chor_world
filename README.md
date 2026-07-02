@@ -18,7 +18,7 @@ The story follows a thrilling universe involving space science, impossible event
 
 ## 🌐 Live Website
 
-👉 https://vidyasagarchouhan9-sketch.github.io/Petri-chor-the-maharaja-s-express-heist-/
+👉 vidyasagarchouhan9.github.io/Petri-chor_world-/
 
 ---
 
