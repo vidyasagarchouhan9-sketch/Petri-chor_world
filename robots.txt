@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: vidyasagarchouhan9.github.io/Petri-chor_world-/sitemap.xml
+Sitemap: https://vidyasagarchouhan9-sketch.github.io/Petri-chor_world/sitemap.xml
