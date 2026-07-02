@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,19 +10,18 @@
 <link rel="icon" href="favicon.png">
 
 <style>
+
 body{
     margin:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    color:white;
     background:#000;
     background-image:url("petri-chor-cover.jpg");
     background-size:cover;
     background-position:center;
-    color:white;
-    font-family:Arial,sans-serif;
-    text-align:center;
+    background-attachment:fixed;
+    overflow:hidden;
 }
 
 body::before{
@@ -33,46 +33,102 @@ body::before{
 }
 
 .box{
-    padding:30px;
+    margin-top:80px;
+    padding:20px;
 }
 
 h1{
-    font-size:55px;
     color:#00f0ff;
+    font-size:55px;
     text-shadow:0 0 20px #00f0ff;
 }
 
 h2{
     color:#FFD700;
-    text-shadow:0 0 15px gold;
+    text-shadow:0 0 12px gold;
 }
-
-/* ✍️ Write your message below this line */
 
 .message{
     margin-top:40px;
-    min-height:180px;
+    min-height:120px;
     font-size:22px;
-    color:white;
 }
+
+.btn{
+    display:inline-block;
+    margin:15px;
+    padding:14px 30px;
+    background:linear-gradient(45deg,#00f0ff,#ff00ff);
+    color:white;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:bold;
+    font-size:18px;
+    box-shadow:0 0 15px #00f0ff;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 25px #ff00ff;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="message">
+<div class="box">
 
 <h1>🎮 COMING SOON 🎮</h1>
 
 <h2>⏳ Wait for me...</h2>
 
+<div class="message">
 
-
-<a class="btn" href="Haha.html">
-
-
+<h2>and who dont want to wait click the button 🔘 👇</h2>
 
 </div>
+
+<a class="btn" href="#" onclick="mystery()">
+🎁 Click If You can dare or dont want to wait...
+</a>
+
+<br>
+
+<a class="btn" href="index.html">
+🏠 Back to Home
+</a>
+
+</div>
+
+<script>
+
+function mystery(){
+
+const messages=[
+"🤖 Security Bot: Nice try!",
+"🚂 The Maharaja's Express has already left!",
+"🕵️ Petri-Chor stole your reward!",
+"🎮 The game unlocks on 26 July!",
+"🔒 Access Denied!",
+"😂 I knew you'd click!",
+"🌌 The universe says: Not yet!",
+"👀 Keep waiting...",
+"😈 Curiosity detected!",
+"🚨 Mission Failed Successfully!"
+"here is your gift after it go back ok"
+    <h1>🖕<h1>
+];
+
+const random=Math.floor(Math.random()*messages.length);
+
+alert(messages[random]);
+
+}
+
+</script>
 
 </body>
 </html>
