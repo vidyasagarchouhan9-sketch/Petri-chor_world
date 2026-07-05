@@ -1,10 +1,12 @@
 {
   "name": "Petri-Chor World",
   "short_name": "Petri-Chor",
-  "start_url": "./",
+  "description": "Read the free sci-fi mystery adventure and explore the Petri-Chor universe.",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#00f0ff",
+  "theme_color": "#000000",
   "orientation": "portrait",
   "icons": [
     {
