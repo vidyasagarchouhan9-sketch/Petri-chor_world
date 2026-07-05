@@ -6,9 +6,34 @@ function resize() {
   canvas.height = window.innerHeight;
 }
 window.addEventListener("resize", resize);
+window.addEventListener("orientationchange", function () {
+  setTimeout(resize, 100);
+});
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", resize);
+}
 resize();
 
+function tryMove(newX, newY) {
+  const pad = 0.2;
+
+  if (worldMap[Math.floor(player.y)][Math.floor(newX + Math.sign(newX - player.x) * pad)] === 0 || Math.sign(newX - player.x) === 0) {
+    if (worldMap[Math.floor(player.y)][Math.floor(newX)] === 0) {
+      player.x = newX;
+    }
+  }
+
+  if (worldMap[Math.floor(newY + Math.sign(newY - player.y) * pad)][Math.floor(player.x)] === 0 || Math.sign(newY - player.y) === 0) {
+    if (worldMap[Math.floor(newY)][Math.floor(player.x)] === 0) {
+      player.y = newY;
+    }
+  }
+}
+
 function update() {
+
+  player.running = !!(keys["shift"] || runActive);
+  player.moveSpeed = player.running ? player.runSpeed : player.walkSpeed;
 
   if (keys["arrowleft"] || keys["a"]) {
     player.angle -= player.turnSpeed;
@@ -31,52 +56,50 @@ function update() {
     newY -= Math.sin(player.angle) * player.moveSpeed;
   }
 
-  // Collision
-  if (worldMap[Math.floor(newY)][Math.floor(newX)] === 0) {
-    player.x = newX;
-    player.y = newY;
+  if (moveY < -0.1) {
+    newX += Math.cos(player.angle) * player.moveSpeed * -moveY;
+    newY += Math.sin(player.angle) * player.moveSpeed * -moveY;
+  } else if (moveY > 0.1) {
+    newX -= Math.cos(player.angle) * player.moveSpeed * moveY;
+    newY -= Math.sin(player.angle) * player.moveSpeed * moveY;
   }
 
+  if (Math.abs(moveX) > 0.1) {
+    const strafeAngle = player.angle + Math.PI / 2;
+    newX += Math.cos(strafeAngle) * player.moveSpeed * moveX;
+    newY += Math.sin(strafeAngle) * player.moveSpeed * moveX;
+  }
+
+  tryMove(newX, newY);
 }
 
 
 function draw() {
-  ctx.fillStyle = "#111";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = "#00f0ff";
-  ctx.font = "30px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText("Petri-Chor Prototype", canvas.width / 2, 50);
-
-  ctx.font = "20px Arial";
-  ctx.fillText(
-    `X: ${player.x.toFixed(2)}  Y: ${player.y.toFixed(2)}`,
-    canvas.width / 2,
-    90
-  );
-
-  ctx.fillText(
-    `Angle: ${player.angle.toFixed(2)}`,
-    canvas.width / 2,
-    120
-  );
+  castRays();
   drawMiniMap();
 }
 
-function gameLoop() {
+let lastTime = performance.now();
+let fpsAccumulator = 0;
+let fpsFrames = 0;
+const fpsEl = document.getElementById("fps");
+
+function gameLoop(now) {
+  const dt = now - lastTime;
+  lastTime = now;
+
+  fpsAccumulator += dt;
+  fpsFrames++;
+  if (fpsAccumulator >= 500) {
+    const fps = Math.round((fpsFrames * 1000) / fpsAccumulator);
+    if (fpsEl) fpsEl.textContent = "FPS: " + fps;
+    fpsAccumulator = 0;
+    fpsFrames = 0;
+  }
+
   update();
   draw();
   requestAnimationFrame(gameLoop);
 }
 
-gameLoop();
-
-
-
-
-
-
-
-
-
+requestAnimationFrame(gameLoop);
