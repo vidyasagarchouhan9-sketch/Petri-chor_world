@@ -74,9 +74,17 @@ function castRays() {
         break;
       }
 
-      if (worldMap[mapY][mapX] > 0) {
+          const cellVal = worldMap[mapY][mapX];
+
+      if (cellVal > 0) {
+        if (isDoorTile(cellVal)) {
+          const door = getDoor(mapX, mapY);
+          if (door.progress > 0.9) {
+            continue;
+          }
+        }
         hit = 1;
-        tile = worldMap[mapY][mapX];
+        tile = cellVal;
       }
     }
 
