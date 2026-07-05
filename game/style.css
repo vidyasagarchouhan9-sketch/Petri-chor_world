@@ -10,6 +10,12 @@ height:100%;
 overflow:hidden;
 background:#000;
 font-family:Arial,sans-serif;
+touch-action:none;
+overscroll-behavior:none;
+-webkit-user-select:none;
+user-select:none;
+-webkit-touch-callout:none;
+-webkit-tap-highlight-color:transparent;
 }
 
 #game{
@@ -20,6 +26,7 @@ width:100%;
 height:100%;
 display:block;
 background:#111;
+touch-action:none;
 }
 
 #hud{
@@ -28,11 +35,14 @@ top:0;
 left:0;
 width:100%;
 padding:15px;
+padding-top:calc(15px + env(safe-area-inset-top));
+padding-left:calc(15px + env(safe-area-inset-left));
+padding-right:calc(15px + env(safe-area-inset-right));
 display:flex;
 justify-content:space-between;
 align-items:center;
 color:white;
-font-size:20px;
+font-size:18px;
 font-weight:bold;
 pointer-events:none;
 text-shadow:0 0 8px cyan;
@@ -52,14 +62,15 @@ user-select:none;
 }
 #joystick{
 position:fixed;
-left:25px;
-bottom:25px;
+left:calc(25px + env(safe-area-inset-left));
+bottom:calc(25px + env(safe-area-inset-bottom));
 width:120px;
 height:120px;
 border-radius:50%;
 background:rgba(255,255,255,.15);
 border:2px solid cyan;
 touch-action:none;
+z-index:10;
 }
 
 #stick{
@@ -79,4 +90,51 @@ top:0;
 width:50%;
 height:100%;
 touch-action:none;
+z-index:5;
+}
+
+#runBtn{
+position:fixed;
+right:calc(30px + env(safe-area-inset-right));
+bottom:calc(35px + env(safe-area-inset-bottom));
+width:70px;
+height:70px;
+border-radius:50%;
+background:rgba(255,255,255,.12);
+border:2px solid cyan;
+color:cyan;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:13px;
+letter-spacing:1px;
+touch-action:none;
+z-index:10;
+text-shadow:0 0 6px cyan;
+}
+
+#runBtn.active{
+background:cyan;
+color:#000;
+text-shadow:none;
+}
+
+@media (max-width:480px), (max-height:480px){
+  #joystick{
+    width:100px;
+    height:100px;
+  }
+  #stick{
+    width:42px;
+    height:42px;
+    left:29px;
+    top:29px;
+  }
+  #hud{
+    font-size:14px;
+  }
+  #crosshair{
+    font-size:28px;
+  }
 }
