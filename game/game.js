@@ -9,7 +9,7 @@ window.addEventListener("resize", resize);
 resize();
 
 function update() {
-  // Rotate
+
   if (keys["arrowleft"] || keys["a"]) {
     player.angle -= player.turnSpeed;
   }
@@ -18,17 +18,27 @@ function update() {
     player.angle += player.turnSpeed;
   }
 
-  // Move
+  let newX = player.x;
+  let newY = player.y;
+
   if (keys["arrowup"] || keys["w"]) {
-    player.x += Math.cos(player.angle) * player.moveSpeed;
-    player.y += Math.sin(player.angle) * player.moveSpeed;
+    newX += Math.cos(player.angle) * player.moveSpeed;
+    newY += Math.sin(player.angle) * player.moveSpeed;
   }
 
   if (keys["arrowdown"] || keys["s"]) {
-    player.x -= Math.cos(player.angle) * player.moveSpeed;
-    player.y -= Math.sin(player.angle) * player.moveSpeed;
+    newX -= Math.cos(player.angle) * player.moveSpeed;
+    newY -= Math.sin(player.angle) * player.moveSpeed;
   }
+
+  // Collision
+  if (worldMap[Math.floor(newY)][Math.floor(newX)] === 0) {
+    player.x = newX;
+    player.y = newY;
+  }
+
 }
+
 
 function draw() {
   ctx.fillStyle = "#111";
