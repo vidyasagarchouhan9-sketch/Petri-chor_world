@@ -1,8 +1,8 @@
 const player = {
-  x: 1.5,
-  y: 1.5,
+  x: 5.5,
+  y: 1.2,
 
-  angle: 0,
+  angle: Math.PI / 2,
 
   fov: Math.PI / 3,
 
