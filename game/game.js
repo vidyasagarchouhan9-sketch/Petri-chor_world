@@ -5,38 +5,57 @@ function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
-
 window.addEventListener("resize", resize);
 resize();
 
-let time = 0;
+function update() {
+  // Rotate
+  if (keys["arrowleft"] || keys["a"]) {
+    player.angle -= player.turnSpeed;
+  }
 
-function gameLoop() {
-  time += 0.02;
+  if (keys["arrowright"] || keys["d"]) {
+    player.angle += player.turnSpeed;
+  }
 
-  // Background
-  ctx.fillStyle = "#222";
+  // Move
+  if (keys["arrowup"] || keys["w"]) {
+    player.x += Math.cos(player.angle) * player.moveSpeed;
+    player.y += Math.sin(player.angle) * player.moveSpeed;
+  }
+
+  if (keys["arrowdown"] || keys["s"]) {
+    player.x -= Math.cos(player.angle) * player.moveSpeed;
+    player.y -= Math.sin(player.angle) * player.moveSpeed;
+  }
+}
+
+function draw() {
+  ctx.fillStyle = "#111";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Ceiling
-  ctx.fillStyle = "#111";
-  ctx.fillRect(0, 0, canvas.width, canvas.height / 2);
-
-  // Floor
-  ctx.fillStyle = "#333";
-  ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2);
-
-  // Title
   ctx.fillStyle = "#00f0ff";
   ctx.font = "30px Arial";
   ctx.textAlign = "center";
-  ctx.fillText("Petri-Chor: Escape", canvas.width / 2, 60);
+  ctx.fillText("Petri-Chor Prototype", canvas.width / 2, 50);
 
-  // Coming Soon
-  ctx.fillStyle = "#ffffff";
   ctx.font = "20px Arial";
-  ctx.fillText("2.5D Engine Loading...", canvas.width / 2, 100);
+  ctx.fillText(
+    `X: ${player.x.toFixed(2)}  Y: ${player.y.toFixed(2)}`,
+    canvas.width / 2,
+    90
+  );
 
+  ctx.fillText(
+    `Angle: ${player.angle.toFixed(2)}`,
+    canvas.width / 2,
+    120
+  );
+}
+
+function gameLoop() {
+  update();
+  draw();
   requestAnimationFrame(gameLoop);
 }
 
