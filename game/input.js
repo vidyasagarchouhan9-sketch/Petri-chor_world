@@ -41,5 +41,3 @@ joystick.addEventListener("touchend", function(){
     moveY = 0;
 
 });
-
-
