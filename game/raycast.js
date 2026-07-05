@@ -36,4 +36,20 @@ function drawMiniMap() {
     );
 
     ctx.fill();
+    ctx.strokeStyle = "yellow";
+ctx.lineWidth = 3;
+
+ctx.beginPath();
+
+ctx.moveTo(
+    player.x * scale + 20,
+    player.y * scale + 150
+);
+
+ctx.lineTo(
+    player.x * scale + 20 + Math.cos(player.angle) * 30,
+    player.y * scale + 150 + Math.sin(player.angle) * 30
+);
+
+ctx.stroke();
 }
