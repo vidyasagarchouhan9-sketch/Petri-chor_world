@@ -51,6 +51,7 @@ function draw() {
     canvas.width / 2,
     120
   );
+  drawMiniMap();
 }
 
 function gameLoop() {
