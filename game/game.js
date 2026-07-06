@@ -104,7 +104,7 @@ function gameLoop(now) {
     fpsFrames = 0;
   }
 
-    update(dt);
+  update(dt);
   draw();
   requestAnimationFrame(gameLoop);
 }
