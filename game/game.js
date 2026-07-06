@@ -17,14 +17,14 @@ resize();
 function tryMove(newX, newY) {
   const pad = 0.2;
 
-  if (worldMap[Math.floor(player.y)][Math.floor(newX + Math.sign(newX - player.x) * pad)] === 0 || Math.sign(newX - player.x) === 0) {
-    if (worldMap[Math.floor(player.y)][Math.floor(newX)] === 0) {
+  if (isWalkable(newX + Math.sign(newX - player.x) * pad, player.y) || Math.sign(newX - player.x) === 0) {
+    if (isWalkable(newX, player.y)) {
       player.x = newX;
     }
   }
 
-  if (worldMap[Math.floor(newY + Math.sign(newY - player.y) * pad)][Math.floor(player.x)] === 0 || Math.sign(newY - player.y) === 0) {
-    if (worldMap[Math.floor(newY)][Math.floor(player.x)] === 0) {
+  if (isWalkable(player.x, newY + Math.sign(newY - player.y) * pad) || Math.sign(newY - player.y) === 0) {
+    if (isWalkable(player.x, newY)) {
       player.y = newY;
     }
   }
