@@ -97,8 +97,15 @@ function castRays() {
     perpDist = Math.abs(perpDist) * Math.cos(rayAngle - player.angle);
     perpDist = Math.max(perpDist, 0.0001);
 
-    const lineHeight = Math.min(h * 3, h / perpDist);
-    const drawStart = (h - lineHeight) / 2;
+        let lineHeight = Math.min(h * 3, h / perpDist);
+    let drawStart = (h - lineHeight) / 2;
+
+    if (isDoorTile(tile)) {
+      const door = getDoor(mapX, mapY);
+      const openAmount = door.progress;
+      drawStart = drawStart - (lineHeight * openAmount) / 2;
+      lineHeight = lineHeight * (1 - openAmount);
+    }
 
     const base = wallColors[tile] || wallColors[1];
     const shade = side === 1 ? 0.65 : 1;
