@@ -1,19 +1,167 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Notices</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petri-Chor | Notices</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(180deg,#020617,#071a35,#000);
+color:white;
+padding:20px;
+}
+
+h1{
+text-align:center;
+font-size:40px;
+color:#00eaff;
+text-shadow:0 0 20px #00eaff;
+margin-top:20px;
+}
+
+.subtitle{
+text-align:center;
+color:#ccc;
+margin-bottom:30px;
+}
+
+.latest{
+background:#071d35;
+border:2px solid #00eaff;
+border-radius:20px;
+padding:20px;
+box-shadow:0 0 20px rgba(0,234,255,.4);
+margin-bottom:30px;
+}
+
+.latest h2{
+color:#00eaff;
+margin-bottom:15px;
+}
+
+.new{
+background:red;
+padding:5px 12px;
+border-radius:20px;
+font-size:13px;
+font-weight:bold;
+display:inline-block;
+margin-top:10px;
+}
+
+.notice{
+background:#111827;
+padding:18px;
+border-radius:18px;
+margin-bottom:18px;
+border-left:6px solid #00eaff;
+transition:.3s;
+}
+
+.notice:hover{
+transform:translateY(-5px);
+box-shadow:0 0 20px rgba(0,234,255,.3);
+}
+
+.date{
+color:#00eaff;
+font-size:14px;
+margin-bottom:8px;
+}
+
+.back{
+display:block;
+width:220px;
+margin:40px auto;
+text-align:center;
+padding:14px;
+background:#00eaff;
+color:black;
+font-weight:bold;
+text-decoration:none;
+border-radius:30px;
+}
+
+footer{
+text-align:center;
+margin-top:30px;
+color:#888;
+}
+</style>
+
 </head>
 <body>
 
+<h1>🚂 PETRI-CHOR</h1>
+
+<p class="subtitle">
+Official Notice Board
+</p>
+
+<div class="latest notice">
+
+<h2>📢 Latest Notice</h2>
+
+<div class="date">
+📅 6 July 2026
+</div>
+
+<h3>⚠️ Development Paused</h3>
+
+<p>
+Due to school examinations, development is temporarily paused.
+Weekly updates will begin again after <b>31 July</b>.
+</p>
+
+<div class="new">
+NEW
+</div>
+
+</div>
+
+<h2 style="margin-bottom:20px;">
+📜 Previous Notices
+</h2>
+
 <div class="notice">
-<h3>6 July 2026</h3>
-<p>Development paused because of exams.</p>
+<div class="date">
+📅 5 July 2026
+</div>
+
+<h3>📱 PWA Released</h3>
+
+<p>
+Petri-Chor can now be installed like a real app.
+</p>
 </div>
 
 <div class="notice">
-<h3>5 July 2026</h3>
-<p>Petri-Chor PWA released.</p>
+<div class="date">
+📅 3 July 2026
 </div>
+
+<h3>🎮 Game Development Started</h3>
+
+<p>
+Development of Coach 1 has officially begun.
+</p>
+</div>
+
+<a class="back" href="index.html">
+🏠 Back to Home
+</a>
+
+<footer>
+© 2026 Vidyasagar | Petri-Chor World
+</footer>
 
 <script>
 const total=document.querySelectorAll(".notice").length;
