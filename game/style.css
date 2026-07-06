@@ -120,24 +120,7 @@ color:#000;
 text-shadow:none;
 }
 
-@media (max-width:480px), (max-height:480px){
-  #joystick{
-    width:100px;
-    height:100px;
-  }
-  #stick{
-    width:42px;
-    height:42px;
-    left:29px;
-    top:29px;
-  }
-  #hud{
-    font-size:14px;
-  }
-  #crosshair{
-    font-size:28px;
-  }
-  #cutscene{
+#cutscene{
 position:fixed;
 left:0;
 right:0;
@@ -192,4 +175,22 @@ z-index:30;
 #blackout.visible{
 opacity:1;
 }
+
+@media (max-width:480px), (max-height:480px){
+  #joystick{
+    width:100px;
+    height:100px;
+  }
+  #stick{
+    width:42px;
+    height:42px;
+    left:29px;
+    top:29px;
+  }
+  #hud{
+    font-size:14px;
+  }
+  #crosshair{
+    font-size:28px;
+  }
 }
