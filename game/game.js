@@ -30,7 +30,14 @@ function tryMove(newX, newY) {
   }
 }
 
-function update() {
+function update(dt) {
+
+  updateStory(dt);
+  updateDoors();
+
+  if (story.controlsLocked) {
+    return;
+  }
 
   player.running = !!(keys["shift"] || runActive);
   player.moveSpeed = player.running ? player.runSpeed : player.walkSpeed;
@@ -97,7 +104,7 @@ function gameLoop(now) {
     fpsFrames = 0;
   }
 
-  update();
+    update(dt);
   draw();
   requestAnimationFrame(gameLoop);
 }
