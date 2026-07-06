@@ -1,116 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Petri-Chor Notices</title>
-
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-
-<style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#000;
-    color:white;
-    background-image:url("petri-chor-cover.jpg");
-    background-size:cover;
-    background-position:center;
-    background-attachment:fixed;
-}
-
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.75);
-    z-index:-1;
-}
-
-.container{
-    max-width:900px;
-    margin:auto;
-    padding:20px;
-}
-
-h1{
-    color:#00f0ff;
-    text-align:center;
-    text-shadow:0 0 15px #00f0ff;
-}
-
-.notice{
-    background:rgba(255,255,255,.08);
-    border-left:5px solid #00f0ff;
-    padding:15px;
-    margin:20px 0;
-    border-radius:10px;
-}
-
-.notice h3{
-    color:#ffd700;
-    margin-top:0;
-}
-
-.btn{
-    display:inline-block;
-    margin-top:20px;
-    padding:12px 20px;
-    background:linear-gradient(45deg,#00f0ff,#ff00ff);
-    color:white;
-    text-decoration:none;
-    border-radius:10px;
-    font-weight:bold;
-}
-
-footer{
-    text-align:center;
-    margin:40px 0;
-    color:#bbb;
-}
-</style>
-
+<title>Notices</title>
 </head>
-
 <body>
 
-<div class="container">
-
-<h1>📢 Petri-Chor Notices</h1>
-
 <div class="notice">
-<h3>📅 6 July 2026</h3>
-<p><b>Development Notice</b></p>
-<p>Due to school examinations, major development is temporarily paused.</p>
-<p>Development will continue after <b>31 July</b>.</p>
-<p>New updates are planned to be released every <b>Sunday</b>.</p>
+<h3>6 July 2026</h3>
+<p>Development paused because of exams.</p>
 </div>
 
 <div class="notice">
-<h3>📅 5 July 2026</h3>
-<p>The Petri-Chor website is now installable as an app (PWA)! 🎉</p>
+<h3>5 July 2026</h3>
+<p>Petri-Chor PWA released.</p>
 </div>
 
-<div class="notice">
-<h3>📅 3 July 2026</h3>
-<p>Development of the Petri-Chor game has officially started. 🚂🎮</p>
-</div>
-
-<div class="notice">
-<h3>📅 1 July 2026</h3>
-<p>The official Petri-Chor website has been launched. 🌌</p>
-</div>
-
-<center>
-<a class="btn" href="index.html">🏠 Back to Home</a>
-</center>
-
-<footer>
-© 2026 Vidyasagar | Petri-Chor World
-</footer>
-
-</div>
+<script>
+const total=document.querySelectorAll(".notice").length;
+localStorage.setItem("lastSeen",total);
+</script>
 
 </body>
-  </html>
+</html>
