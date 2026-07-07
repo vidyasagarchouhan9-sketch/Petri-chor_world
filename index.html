@@ -272,6 +272,119 @@ href="https://docs.google.com/forms/d/e/1FAIpQLScPO-WfHPqqgmosn17KAykWz2Ru7OkcJx
 <a class="btn" href="game(1).html">
 🎮 Find the 13 Security Bots
 </a>
+    <!-- Google Chat Floating Widget -->
+<style>
+  .gchat-widget {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    font-family: 'Google Sans', Arial, sans-serif;
+  }
+
+  .gchat-tooltip {
+    background: #ffffff;
+    color: #202124;
+    padding: 10px 16px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+    transition: all 0.2s ease;
+    pointer-events: none;
+  }
+
+  .gchat-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .gchat-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #1a73e8;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(26,115,232,0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    text-decoration: none;
+  }
+
+  .gchat-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(26,115,232,0.55);
+    background: #1557b0;
+  }
+
+  .gchat-btn svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .gchat-pulse {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(26,115,232,0.3);
+    animation: pulse 2s ease-out infinite;
+  }
+
+  @keyframes pulse {
+    0%   { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(1.7); opacity: 0; }
+  }
+
+  .gchat-btn-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<div class="gchat-widget" id="gchatWidget">
+  <div class="gchat-tooltip" id="gchatTooltip">Chat with me on Google Chat</div>
+  <div class="gchat-btn-wrap">
+    <div class="gchat-pulse"></div>
+    <a
+      class="gchat-btn"
+      href="https://mail.google.com/chat/u/0/#chat/dm/vidyasagarchouhan9@gmail.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat on Google Chat"
+      id="gchatBtn"
+    >
+      <!-- Google Chat icon -->
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="white"/>
+        <circle cx="8" cy="10" r="1.5" fill="#1a73e8"/>
+        <circle cx="12" cy="10" r="1.5" fill="#1a73e8"/>
+        <circle cx="16" cy="10" r="1.5" fill="#1a73e8"/>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById('gchatBtn');
+  const tooltip = document.getElementById('gchatTooltip');
+
+  btn.addEventListener('mouseenter', () => tooltip.classList.add('visible'));
+  btn.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+</script>
+<!-- End Google Chat Floating Widget -->
     <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
