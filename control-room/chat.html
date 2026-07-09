@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Petri-Chor Control Room</title>
+<style>
+body {
+  background: black;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+
+.chat-box {
+  width: 90%;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  border: 2px solid cyan;
+  border-radius: 15px;
+}
+
+input, button {
+  padding: 10px;
+  margin: 5px;
+}
+
+button {
+  background: cyan;
+  border: none;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🚂 Petri-Chor Control Room 🔬</h1>
+
+<div class="chat-box">
+
+<div id="messages"></div>
+
+<input id="name" placeholder="Your name">
+<br>
+
+<input id="message" placeholder="Your message">
+<br>
+
+<button onclick="sendMessage()">Send</button>
+
+</div>
+
+
+<script>
+const SUPABASE_URL = "https://ltbhnvrniwlivhoswzhr.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0YmhudnJuaXdsaXZob3N3emhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MjY1ODQsImV4cCI6MjA5OTAwMjU4NH0.zDXfUU2ogNQiV5w3qHh_RRRcw_b5egr9459aIsF3pg8";
+
+async function loadMessages(){
+
+let response = await fetch(
+SUPABASE_URL + "/rest/v1/messages?select=*",
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY
+}
+});
+
+let data = await response.json();
+
+let box = document.getElementById("messages");
+
+box.innerHTML="";
+
+data.forEach(msg=>{
+box.innerHTML += `
+<p>
+<b>${msg.name}</b>: ${msg.message}
+</p>
+`;
+});
+
+}
+
+loadMessages();
+  
+async function sendMessage(){
+
+let name = document.getElementById("name").value;
+let message = document.getElementById("message").value;
+
+await fetch(SUPABASE_URL + "/rest/v1/messages",{
+method:"POST",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:name,
+message:message
+})
+});
+
+alert("Message sent 🚀");
+
+}
+
+</script>
+
+</body>
+</html>
+
