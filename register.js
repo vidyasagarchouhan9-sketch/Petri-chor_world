@@ -1,5 +1,5 @@
 const SUPABASE_URL = "https://fsasedzkypyucdrnvyvw.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzYXNlZHpreXB5dWNkcm52eXZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1OTA5ODcsImV4cCI6MjA5OTE";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzYXNlZHpreXB5dWNkcm52eXZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1OTA5ODcsImV4cCI6MjA5OTE2Njk4N30.mDGLBxu4wFoQytx7aMb95NlHyfUbFNRyE_C8EsmkBV0";
 
 const { createClient } = supabase;
 const client = createClient(SUPABASE_URL, SUPABASE_KEY);
