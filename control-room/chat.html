@@ -89,12 +89,13 @@ async function sendMessage(){
 let name = document.getElementById("name").value;
 let message = document.getElementById("message").value;
 
-await fetch(SUPABASE_URL + "/rest/v1/messages",{
+let response = await fetch(SUPABASE_URL + "/rest/v1/messages",{
 method:"POST",
 headers:{
 "apikey":SUPABASE_KEY,
 "Authorization":"Bearer "+SUPABASE_KEY,
-"Content-Type":"application/json"
+"Content-Type":"application/json",
+"Prefer":"return=representation"
 },
 body:JSON.stringify({
 name:name,
@@ -102,10 +103,19 @@ message:message
 })
 });
 
-alert("Message sent 🚀");
+let result = await response.text();
 
+console.log(result);
+
+if(response.ok){
+alert("Message sent 🚀");
+loadMessages();
+}else{
+alert("Error:\n"+result);
 }
 
+}
+  
 </script>
 
 </body>
