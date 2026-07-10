@@ -29,9 +29,13 @@ async function register() {
   });
 
   if (error) {
-    status.innerHTML = "❌ " + error.message;
-    console.error(error);
-    return;
+  alert(
+    "Message: " + error.message +
+    "\nStatus: " + error.status +
+    "\nCode: " + error.code
+  );
+  console.error(error);
+  return;
   }
 
   status.innerHTML = "✅ Account created successfully!";
