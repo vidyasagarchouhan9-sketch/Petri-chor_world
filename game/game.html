@@ -208,6 +208,32 @@ button:active{
 
 
 <script src="map.js"></script>
+
+<script>
+
+const map = document.getElementById("map");
+
+mapData.forEach(row=>{
+    row.split("").forEach(cell=>{
+        let tile=document.createElement("div");
+        tile.className="tile";
+
+        if(cell==="1"){
+            tile.classList.add("wall");
+        }
+        else if(cell==="2"){
+            tile.classList.add("door");
+        }
+        else{
+            tile.classList.add("floor");
+        }
+
+        map.appendChild(tile);
+    });
+});
+
+</script>
+    
 <script>
 
 
