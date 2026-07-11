@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Petri-Chor: Saturn Rings Mystery</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<style>
+
+body{
+    margin:0;
+    overflow:hidden;
+    background:#05051a;
+    touch-action:none;
+}
+
+
+#game{
+
+    width:100vw;
+    height:100vh;
+
+    overflow:hidden;
+
+    position:relative;
+
+    background:#000;
+
+}
+
+
+#map{
+
+    width:3000px;
+    height:2000px;
+
+    position:absolute;
+
+    background:
+    radial-gradient(circle,#ffffff55 1px,transparent 2px);
+
+}
+
+
+
+#player{
+
+    width:70px;
+    height:70px;
+
+    position:absolute;
+
+    left:500px;
+    top:400px;
+
+}
+
+
+
+#player img{
+
+    width:70px;
+    height:70px;
+
+    object-fit:contain;
+
+}
+
+
+
+/* Walking animation */
+
+.walking img{
+
+    animation:walk 0.15s infinite alternate;
+
+}
+
+
+@keyframes walk{
+
+    from{
+        transform:translateY(0px);
+    }
+
+    to{
+        transform:translateY(-5px);
+    }
+
+}
+
+
+
+/* Neon sci-fi controls */
+
+.controls{
+
+    position:fixed;
+
+    bottom:20px;
+
+    left:20px;
+
+    text-align:center;
+
+}
+
+
+
+button{
+
+    width:65px;
+    height:65px;
+
+    margin:4px;
+
+    border-radius:18px;
+
+    border:2px solid #00ffff;
+
+    background:rgba(0,255,255,0.12);
+
+    color:#00ffff;
+
+    font-size:25px;
+
+    font-weight:bold;
+
+    backdrop-filter:blur(8px);
+
+    box-shadow:
+    0 0 10px #00ffff,
+    inset 0 0 10px #00ffff;
+
+    cursor:pointer;
+
+}
+
+
+
+button:active{
+
+    transform:scale(0.9);
+
+    background:rgba(0,255,255,0.35);
+
+    box-shadow:
+    0 0 25px #00ffff,
+    inset 0 0 20px #00ffff;
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+<div id="game">
+
+
+<div id="map">
+
+
+<div id="player">
+
+<img src="walk.png">
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- Mobile D-Pad -->
+
+<div class="controls">
+
+
+<button onclick="move(0,-50)">⬆️</button>
+
+
+<br>
+
+
+<button onclick="move(-50,0)">⬅️</button>
+
+<button onclick="move(0,50)">⬇️</button>
+
+<button onclick="move(50,0)">➡️</button>
+
+
+</div>
+
+
+
+
+<script>
+
+
+let x = 500;
+
+let y = 400;
+
+
+let player = document.getElementById("player");
+
+
+
+function move(dx,dy){
+
+
+    x += dx;
+
+    y += dy;
+
+
+    player.style.left = x + "px";
+
+    player.style.top = y + "px";
+
+
+
+    // Face direction
+
+    if(dx < 0){
+
+        player.style.transform = "scaleX(-1)";
+
+    }
+
+
+    if(dx > 0){
+
+        player.style.transform = "scaleX(1)";
+
+    }
+
+
+
+    // Walking effect
+
+    player.classList.add("walking");
+
+
+    setTimeout(()=>{
+
+        player.classList.remove("walking");
+
+    },150);
+
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
