@@ -1,5 +1,5 @@
 const SUPABASE_URL = "https://fsasedzkypyucdrnvyvw.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzYXNlZHpreXB5dWNkcm52eXZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1OTA5ODcsImV4cCI6MjA5OTE2Njk4N30.mDGLBxu4wFoQytx7aMb95NlHyfUbFNRyE_C8EsmkBV0";
+const SUPABASE_KEY = "YOUR_FULL_ANON_KEY";
 
 const { createClient } = supabase;
 const client = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -23,31 +23,40 @@ async function register() {
     return;
   }
 
+  // Create Auth account
   const { data, error } = await client.auth.signUp({
-    email: email,
-    password: password
+    email,
+    password
   });
 
-  const user = data.user;
+  if (error) {
+    alert("Signup Error:\n" + error.message);
+    return;
+  }
 
-const { error: insertError } = await client
-  .from("users")
-  .insert({
-    auth_user_id: user.id,
-    username: username,
-    country: country,
-    avatar: "default.png",
-    role: "user"
-  });
+  if (!data.user) {
+    alert("No user returned from Supabase.");
+    return;
+  }
 
-if (insertError) {
-  alert("Insert Error: " + insertError.message);
-  return;
-}
+  // Save profile
+  const { error: insertError } = await client
+    .from("users")
+    .insert({
+      auth_user_id: data.user.id,
+      username: username,
+      country: country,
+      avatar: "default.png",
+      role: "user"
+    });
 
-  status.innerHTML = "✅ Account created successfully!";
+  if (insertError) {
+    alert("Insert Error:\n" + insertError.message);
+    console.error(insertError);
+    return;
+  }
 
-alert("About to redirect...");
+  alert("✅ Account created successfully!");
 
-window.location.href = "index.html";
+  window.location.replace("index.html");
 }
