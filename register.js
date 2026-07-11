@@ -28,15 +28,22 @@ async function register() {
     password: password
   });
 
-  if (error) {
-  alert(
-    "Message: " + error.message +
-    "\nStatus: " + error.status +
-    "\nCode: " + error.code
-  );
-  console.error(error);
+  const user = data.user;
+
+const { error: insertError } = await client
+  .from("users")
+  .insert({
+    auth_user_id: user.id,
+    username: username,
+    country: country,
+    avatar: "default.png",
+    role: "user"
+  });
+
+if (insertError) {
+  alert("Insert Error: " + insertError.message);
   return;
-  }
+}
 
   status.innerHTML = "✅ Account created successfully!";
 
