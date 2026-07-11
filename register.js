@@ -39,5 +39,8 @@ async function register() {
   }
 
   status.innerHTML = "✅ Account created successfully!";
-  console.log(data);
+
+setTimeout(() => {
+  window.location.href = "index.html";
+}, 1500);
 }
