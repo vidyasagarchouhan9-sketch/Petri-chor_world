@@ -40,7 +40,7 @@ async function register() {
 
   status.innerHTML = "✅ Account created successfully!";
 
-setTimeout(() => {
-  window.location.href = "index.html";
-}, 1500);
+alert("About to redirect...");
+
+window.location.href = "index.html";
 }
