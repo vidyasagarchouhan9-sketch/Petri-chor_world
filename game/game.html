@@ -3,7 +3,7 @@
 
 <head>
 
-<title>Petri-Chor: Saturn Rings Mystery</title>
+<title>Petri-Chor: Aurora Space Station</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,7 +13,7 @@
 body{
     margin:0;
     overflow:hidden;
-    background:#05051a;
+    background:#020617;
     touch-action:none;
 }
 
@@ -27,43 +27,112 @@ body{
 
     position:relative;
 
+}
+
+
+
+#world{
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+}
+
+
+
+#map{
+
+    display:grid;
+
+    grid-template-columns:repeat(30,50px);
+
+}
+
+
+
+/* TILE */
+
+.tile{
+
+    width:50px;
+    height:50px;
+
+}
+
+
+
+/* Normal wall */
+
+.wall{
+
+    background:#05070d;
+
+    border:1px solid #008cff;
+
+}
+
+
+
+/* Security wall */
+
+.security{
+
+    background:#000;
+
+    border:2px solid #00ffff;
+
+    box-shadow:
+    0 0 15px #00ffff;
+
+}
+
+
+
+/* Floor */
+
+.floor{
+
     background:#000;
 
 }
 
 
-#map{
 
-    width:3000px;
-    height:2000px;
+/* Door */
 
-    position:absolute;
+.door{
 
-    background:
-    radial-gradient(circle,#ffffff55 1px,transparent 2px);
+    background:#005b7a;
+
+    border:2px solid white;
+
+    box-shadow:
+    0 0 15px #00ffff;
 
 }
 
 
+
+/* PLAYER */
 
 #player{
 
-    width:70px;
-    height:70px;
+    width:60px;
+    height:60px;
 
     position:absolute;
 
-    left:500px;
-    top:400px;
+    z-index:5;
 
 }
-
 
 
 #player img{
 
-    width:70px;
-    height:70px;
+    width:60px;
+    height:60px;
 
     object-fit:contain;
 
@@ -71,30 +140,30 @@ body{
 
 
 
-/* Walking animation */
+/* Walking */
 
 .walking img{
 
-    animation:walk 0.15s infinite alternate;
+    animation:walk .15s infinite alternate;
 
 }
 
 
 @keyframes walk{
 
-    from{
-        transform:translateY(0px);
-    }
+from{
+    margin-top:0;
+}
 
-    to{
-        transform:translateY(-5px);
-    }
+to{
+    margin-top:-5px;
+}
 
 }
 
 
 
-/* Neon sci-fi controls */
+/* Controls */
 
 .controls{
 
@@ -109,7 +178,6 @@ body{
 }
 
 
-
 button{
 
     width:65px;
@@ -121,42 +189,26 @@ button{
 
     border:2px solid #00ffff;
 
-    background:rgba(0,255,255,0.12);
+    background:rgba(0,255,255,0.15);
 
     color:#00ffff;
 
     font-size:25px;
 
-    font-weight:bold;
-
-    backdrop-filter:blur(8px);
-
     box-shadow:
-    0 0 10px #00ffff,
-    inset 0 0 10px #00ffff;
-
-    cursor:pointer;
+    0 0 15px #00ffff;
 
 }
-
 
 
 button:active{
 
-    transform:scale(0.9);
-
-    background:rgba(0,255,255,0.35);
-
-    box-shadow:
-    0 0 25px #00ffff,
-    inset 0 0 20px #00ffff;
+    transform:scale(.9);
 
 }
 
 
-
 </style>
-
 
 </head>
 
@@ -167,34 +219,32 @@ button:active{
 
 <div id="game">
 
+<div id="world">
 
-<div id="map">
+
+<div id="map"></div>
 
 
 <div id="player">
 
-<img src="walk.png">
+<img src="images/petri-chor-player.png">
 
 </div>
 
 
 </div>
 
-
 </div>
 
 
 
-<!-- Mobile D-Pad -->
 
 <div class="controls">
 
 
 <button onclick="move(0,-50)">⬆️</button>
 
-
 <br>
-
 
 <button onclick="move(-50,0)">⬅️</button>
 
@@ -207,90 +257,215 @@ button:active{
 
 
 
-<script src="map.js"></script>
+
 
 <script>
 
-const map = document.getElementById("map");
+
+const mapData=[
+
+"111111111111111111111111111111",
+
+"100000000020000000000000000001",
+
+"100011111110001111111000000001",
+
+"100010000000001000001000000001",
+
+"100010003000001000001000000001",
+
+"100012000000001000001000000001",
+
+"111110000000001000001000000001",
+
+"100000000000002000001000000001",
+
+"100000003000001000001000000001",
+
+"100011111200001000001111100001",
+
+"100010000000001000000000100001",
+
+"100010000000002000000000100001",
+
+"100010000111111111000000100001",
+
+"100010000000000000000000100001",
+
+"100012000000000000000000200001",
+
+"111111111111111111111111111111"
+
+];
+
+
+
+let map=document.getElementById("map");
+
+
 
 mapData.forEach(row=>{
-    row.split("").forEach(cell=>{
-        let tile=document.createElement("div");
-        tile.className="tile";
 
-        if(cell==="1"){
-            tile.classList.add("wall");
-        }
-        else if(cell==="2"){
-            tile.classList.add("door");
-        }
-        else{
-            tile.classList.add("floor");
-        }
+row.split("").forEach(cell=>{
 
-        map.appendChild(tile);
-    });
+
+let tile=document.createElement("div");
+
+tile.className="tile";
+
+
+if(cell==="1")
+tile.classList.add("wall");
+
+else if(cell==="2")
+tile.classList.add("door");
+
+else if(cell==="3")
+tile.classList.add("security");
+
+else
+tile.classList.add("floor");
+
+
+map.appendChild(tile);
+
+
 });
 
-</script>
-    
-<script>
+
+});
 
 
-let x = 500;
-
-let y = 400;
 
 
-let player = document.getElementById("player");
+// PLAYER MOVEMENT
+
+
+let x=150;
+
+let y=150;
+
+
+let player=document.getElementById("player");
+
+
+
+player.style.left=x+"px";
+player.style.top=y+"px";
+
+// Player position
+
+let x=150;
+let y=150;
+
+let tileSize=50;
+
+let player=document.getElementById("player");
+
+player.style.left=x+"px";
+player.style.top=y+"px";
+
+
+// Check collision
+
+function canMove(newX,newY){
+
+
+    // Player center position
+
+    let centerX=newX+30;
+    let centerY=newY+30;
+
+
+    // Find tile
+
+    let col=Math.floor(centerX/tileSize);
+    let row=Math.floor(centerY/tileSize);
+
+
+    // Outside map
+
+    if(!mapData[row] || !mapData[row][col]){
+        return false;
+    }
+
+
+    let tile=mapData[row][col];
+
+
+    // Walls blocked
+
+    if(tile==="1" || tile==="3"){
+
+        return false;
+
+    }
+
+
+    // Door and floor allowed
+
+    return true;
+
+}
+
 
 
 
 function move(dx,dy){
 
 
-    x += dx;
-
-    y += dy;
-
-
-    player.style.left = x + "px";
-
-    player.style.top = y + "px";
+let newX=x+dx;
+let newY=y+dy;
 
 
 
-    // Face direction
-
-    if(dx < 0){
-
-        player.style.transform = "scaleX(-1)";
-
-    }
+if(canMove(newX,newY)){
 
 
-    if(dx > 0){
-
-        player.style.transform = "scaleX(1)";
-
-    }
+    x=newX;
+    y=newY;
 
 
-
-    // Walking effect
-
-    player.classList.add("walking");
-
-
-    setTimeout(()=>{
-
-        player.classList.remove("walking");
-
-    },150);
-
+    player.style.left=x+"px";
+    player.style.top=y+"px";
 
 
 }
+
+
+
+// Face direction
+
+if(dx<0){
+
+player.style.transform="scaleX(-1)";
+
+}
+
+
+if(dx>0){
+
+player.style.transform="scaleX(1)";
+
+}
+
+
+
+// walking effect
+
+player.classList.add("walking");
+
+
+setTimeout(()=>{
+
+player.classList.remove("walking");
+
+},150);
+
+
+    }
+
+
 
 
 </script>
