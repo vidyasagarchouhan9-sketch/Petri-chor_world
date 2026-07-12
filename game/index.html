@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petri-Chor : Aurora Space Station</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="hud">🛰️ Aurora Space Station</div>
+    <div id="room-banner"></div>
+    
+    <div id="minimap">
+        <canvas id="minimapCanvas" width="120" height="120"></canvas>
+    </div>
+
+    <div id="game">
+        <div id="world">
+            <div id="map"></div>
+            <div id="player">
+                <img src="walk.png" alt="Player">
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="btn-up">⬆️</button>
+        <br>
+        <button id="btn-left">⬅️</button>
+        <button id="btn-down">⬇️</button>
+        <button id="btn-right">➡️</button>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
