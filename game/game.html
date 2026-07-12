@@ -212,7 +212,7 @@ const DECOR    = 9;
 const SPAWN    = 10;
 
 // ============================================================================
-// AURORA SPACE STATION MAP DATA GENERATOR
+// AURORA SPACE STATION MAP DATA GENERATOR (FIXED CONNECTIVITY & 2-TILE PATHS)
 // ============================================================================
 const mapData = (function() {
     const WIDTH = 70;
@@ -234,13 +234,16 @@ const mapData = (function() {
         fillRect(x + 1, y + 1, w - 2, h - 2, FLOOR);
     }
 
-    // Rooms & Halls Setup
+    // --- 1. BASE ROOMS & HALLWAYS CONFIGURATION ---
     createRoom(24, 24, 22, 14); // Central Hall
-    fillRect(10, 29, 15, 4, WALL); fillRect(11, 30, 14, 2, FLOOR); // Corridor W
-    fillRect(32, 14, 6, 11, WALL); fillRect(34, 15, 2, 10, FLOOR); // Corridor N
-    fillRect(45, 29, 16, 4, WALL); fillRect(45, 30, 15, 2, FLOOR); // Corridor E
-    fillRect(32, 37, 6, 12, WALL); fillRect(34, 37, 2, 11, FLOOR); // Corridor S
 
+    // Main Corridors (All guaranteed 2-tiles wide minimum walkable floor space)
+    fillRect(10, 29, 15, 4, WALL); fillRect(10, 30, 15, 2, FLOOR); // Corridor W
+    fillRect(32, 14, 6, 11, WALL); fillRect(34, 14, 2, 11, FLOOR); // Corridor N
+    fillRect(45, 29, 16, 4, WALL); fillRect(45, 30, 16, 2, FLOOR); // Corridor E
+    fillRect(32, 37, 6, 12, WALL); fillRect(34, 37, 2, 12, FLOOR); // Corridor S
+
+    // Room Enclosures (Internal space designed safely around objects)
     createRoom(2, 22, 12, 10);  // Bio Lab
     createRoom(12, 15, 14, 10); // Medical Bay
     createRoom(24, 5, 13, 10);  // Control Room
@@ -254,34 +257,58 @@ const mapData = (function() {
     createRoom(21, 46, 14, 11); // Observation Deck
     createRoom(4, 44, 14, 11);  // Airlock
 
-    fillRect(17, 49, 5, 4, WALL); fillRect(17, 50, 5, 2, FLOOR);
-    fillRect(6, 31, 5, 14, WALL); fillRect(7, 31, 2, 14, FLOOR);
+    // --- 2. TRANSITIONAL JOINTS & EXTENSIONS (2-TILE MINIMUM CLEARANCE) ---
+    // Connect Bio Lab & Airlock down the left wing cleanly (Walkable width expanded to 3 columns)
+    fillRect(6, 31, 5, 14, WALL); fillRect(7, 31, 3, 14, FLOOR); 
+    
+    // Secure West Corridor cross-intersection with left-wing vertical hallway
+    fillRect(9, 30, 3, 2, FLOOR); 
+
+    // Connect Engine Room down to Power Reactor & Storage layout (Walkable width set to 2 columns)
     fillRect(56, 44, 4, 11, WALL); fillRect(57, 44, 2, 11, FLOOR);
 
-    // Precise Doorways (Tile 2)
-    map[30][24] = DOOR; map[24][34] = DOOR; map[24][35] = DOOR; map[30][45] = DOOR;
-    map[37][34] = DOOR; map[37][35] = DOOR; map[27][13] = DOOR; map[21][17] = DOOR;
-    map[14][28] = DOOR; map[14][40] = DOOR; map[16][53] = DOOR; map[26][55] = DOOR;
-    map[39][47] = DOOR; map[48][56] = DOOR; map[54][57] = DOOR; map[51][42] = DOOR;
-    map[46][26] = DOOR; map[48][17] = DOOR;
+    // Bridge Airlock directly across to Observation Deck corridor pathing (Walkable height set to 2 rows)
+    fillRect(17, 49, 5, 4, WALL); fillRect(17, 50, 5, 2, FLOOR);
 
-    // Room Details & Entity Distribution
-    fillRect(4, 24, 4, 2, LAB); fillRect(9, 24, 3, 2, LAB);
-    map[5][28] = DECOR; map[6][28] = DECOR; // Bio Lab Lab Eq / Deco
+    // --- 3. DOORWAY PLACEMENT (ALIGNING OPEN WALKABLE ENTRIES) ---
+    // Core Hub Connections
+    map[30][24] = DOOR; // Central Hall -> West Corridor
+    map[24][34] = DOOR; map[24][35] = DOOR; // Central Hall -> North Corridor
+    map[30][45] = DOOR; // Central Hall -> East Corridor
+    map[37][34] = DOOR; map[37][35] = DOOR; // Central Hall -> South Corridor
+
+    // Room Entrance Initializations
+    map[27][13] = DOOR; // Bio Lab Entrance
+    map[21][17] = DOOR; // Medical Bay Entrance
+    map[14][28] = DOOR; // Control Room Entrance
+    map[14][40] = DOOR; // AI Core Entrance
+    map[16][53] = DOOR; // Crew Quarters Entrance
+    map[26][55] = DOOR; // Cafeteria Entrance
+    map[39][47] = DOOR; // Engine Room Entrance
+    map[48][56] = DOOR; // Power Reactor Entrance
+    map[54][57] = DOOR; // Storage Entrance
+    map[51][42] = DOOR; // Workshop Entrance
+    map[46][26] = DOOR; // Observation Deck Entrance
+    map[48][17] = DOOR; // Airlock Primary Entrance
+
+    // --- 4. DECORATIONS & SPECIFIC ENTITIES ---
+    // Placed strictly along wall limits to preserve the minimum 2-tile walkable path requirement
+    fillRect(4, 23, 4, 1, LAB); fillRect(9, 23, 3, 1, LAB);
+    map[3][28] = DECOR; map[4][28] = DECOR;
     map[14][17] = MEDICAL; map[14][20] = MEDICAL; map[14][23] = MEDICAL;
-    map[17][17] = DECOR; map[17][20] = DECOR; map[17][23] = DECOR; // Med Bay Beds
-    fillRect(26, 7, 9, 1, TERMINAL); map[28][9] = TERMINAL; map[32][9] = TERMINAL; // Control Room
-    fillRect(45, 12, 2, 2, REACTOR); // AI Core Reactor
-    map[42][9] = TERMINAL; map[49][9] = TERMINAL; map[42][16] = TERMINAL; map[49][16] = TERMINAL;
-    for(let i = 55; i < 66; i += 3) { map[12][i] = DECOR; map[18][i] = CRATE; } // Quarters
-    fillRect(58, 23, 4, 2, DECOR); fillRect(58, 27, 4, 2, DECOR); // Cafeteria Tables
-    fillRect(49, 38, 5, 2, DECOR); map[52][42] = TERMINAL; // Engine Room
-    fillRect(59, 48, 4, 4, REACTOR); // Power Reactor Core
-    fillRect(54, 56, 3, 2, CRATE); fillRect(60, 56, 4, 2, CRATE);
-    fillRect(55, 60, 2, 2, CRATE); fillRect(62, 60, 3, 2, CRATE); // Storage Crates
-    fillRect(40, 50, 4, 2, DECOR); map[45][53] = CRATE; map[46][53] = CRATE; // Workshop
-    fillRect(22, 55, 12, 1, WINDOW); map[27][52] = DECOR; // Observation Deck Windows
-    map[49][4] = DOOR; map[50][4] = DOOR; fillRect(6, 46, 3, 2, DECOR); // Airlock
+    map[15][17] = DECOR; map[15][20] = DECOR; map[15][23] = DECOR;
+    fillRect(25, 6, 10, 1, TERMINAL); map[28][7] = TERMINAL; map[32][7] = TERMINAL;
+    fillRect(45, 12, 2, 2, REACTOR);
+    map[41][8] = TERMINAL; map[50][8] = TERMINAL; map[41][15] = TERMINAL; map[50][15] = TERMINAL;
+    for(let i = 55; i < 66; i += 3) { map[11][i] = DECOR; map[19][i] = CRATE; }
+    fillRect(56, 21, 4, 1, DECOR); fillRect(56, 29, 4, 1, DECOR);
+    fillRect(48, 37, 5, 1, DECOR); map[48][44] = TERMINAL;
+    fillRect(59, 46, 4, 4, REACTOR);
+    fillRect(53, 55, 3, 1, CRATE); fillRect(61, 55, 4, 1, CRATE);
+    fillRect(53, 61, 2, 1, CRATE); fillRect(63, 61, 3, 1, CRATE);
+    fillRect(39, 49, 4, 1, DECOR); map[45][49] = CRATE; map[46][49] = CRATE;
+    fillRect(22, 55, 12, 1, WINDOW); map[27][54] = DECOR;
+    map[49][4] = DOOR; map[50][4] = DOOR; fillRect(5, 45, 3, 1, DECOR); // Outer Docking Gate
 
     // Dedicated Spawn Tile (Placed inside the Central Hall safely)
     map[30][35] = SPAWN;
@@ -325,11 +352,9 @@ let playerY = 0;
 let camX = 0;
 let camY = 0;
 
-// Movement speeds (pixels per second)
 const MOVE_SPEED = 220; 
 const CAMERA_LERP = 0.1; 
 
-// Input state tracking
 const inputDir = { x: 0, y: 0 };
 let isWalking = false;
 
@@ -343,7 +368,7 @@ const game = document.getElementById("game");
     for (let r = 0; r < mapData.length; r++) {
         for (let c = 0; c < mapData[r].length; c++) {
             if (mapData[r][c] === SPAWN) {
-                playerX = c * TILE_SIZE - 5; // Center alignment offset adjustments
+                playerX = c * TILE_SIZE - 5; 
                 playerY = r * TILE_SIZE - 5;
                 return;
             }
@@ -366,7 +391,6 @@ world.style.transform = `translate(${camX}px, ${camY}px)`;
 // SYSTEM ENGINE LOGIC (COLLISION & AUTOMATIC DOORS)
 // ============================================================================
 function checkWalkable(x, y) {
-    // Check all 4 boundary corners of the player bounding box (approx 40x40 inside 60x60 container)
     const padding = 12;
     const points = [
         { x: x + padding, y: y + padding },
@@ -382,7 +406,7 @@ function checkWalkable(x, y) {
         if (!mapData[row] || mapData[row][col] === undefined) return false;
         const tile = mapData[row][col];
 
-        // Explicit Walkable filter configuration
+        // Only FLOOR, DOOR, and SPAWN allow passage
         if (tile !== FLOOR && tile !== DOOR && tile !== SPAWN) {
             return false;
         }
@@ -391,7 +415,6 @@ function checkWalkable(x, y) {
 }
 
 function updateDoors() {
-    // Proximity check configuration (Open if player center is within 1.5 tiles range)
     const pCenterX = playerX + 30;
     const pCenterY = playerY + 30;
 
@@ -423,7 +446,6 @@ function evaluateMovementVector() {
     if (activeButtons.has("left"))  inputDir.x = -1;
     if (activeButtons.has("right")) inputDir.x = 1;
 
-    // Direct configuration updates for handling animations/turning states
     if (inputDir.x !== 0 || inputDir.y !== 0) {
         isWalking = true;
         player.classList.add("walking");
@@ -461,7 +483,6 @@ bindHoldControl("btn-down", "down");
 bindHoldControl("btn-left", "left");
 bindHoldControl("btn-right", "right");
 
-// Clean hardware context support for basic keyboard troubleshooting/control enhancements
 window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") activeButtons.add("up");
     if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") activeButtons.add("down");
@@ -487,11 +508,9 @@ function gameLoop(currentTime) {
     let dt = (currentTime - lastTime) / 1000;
     lastTime = currentTime;
 
-    // Cap delta time spikes to prevent visual wall clipping during tab switches
     if (dt > 0.1) dt = 0.1; 
 
     if (isWalking) {
-        // Handle axis movement calculation independently to allow fluid sliding along wall edges
         let nextX = playerX + inputDir.x * MOVE_SPEED * dt;
         let nextY = playerY + inputDir.y * MOVE_SPEED * dt;
 
