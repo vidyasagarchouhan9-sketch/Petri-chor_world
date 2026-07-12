@@ -299,72 +299,87 @@ function updateDoors() {
     }
 }
 
-// ============================================================================
-// INPUT CONTROLLERS
-// ============================================================================
-const activeButtons = new Set();
+// ============================================================================\n// VIRTUAL JOYSTICK LOGIC\n// ============================================================================\nconst joystickContainer = document.getElementById('joystick-container');
+const joystickBase = document.getElementById('joystick-base');
+const joystickThumb = document.getElementById('joystick-thumb');
 
-function evaluateMovementVector() {
-    inputDir.x = 0;
-    inputDir.y = 0;
+let joystickActive = false;
+let joystickStartX = 0;
+let joystickStartY = 0;
 
-    if (activeButtons.has("up"))    inputDir.y = -1;
-    if (activeButtons.has("down"))  inputDir.y = 1;
-    if (activeButtons.has("left"))  inputDir.x = -1;
-    if (activeButtons.has("right")) inputDir.x = 1;
+// Maximum distance the thumb stick can slide from the center (in pixels)
+const maxDistance = 50; 
 
-    if (inputDir.x !== 0 || inputDir.y !== 0) {
+function handleJoystickStart(e) {
+    joystickActive = true;
+    isWalking = true;
+    
+    // Support both Touch events and Mouse clicks
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    // Set center baseline position relative to the base circle
+    const rect = joystickBase.getBoundingClientRect();
+    joystickStartX = rect.left + rect.width / 2;
+    joystickStartY = rect.top + rect.height / 2;
+    
+    handleJoystickMove(e);
+}
+
+function handleJoystickMove(e) {
+    if (!joystickActive) return;
+    e.preventDefault();
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // Calculate distance from center
+    let deltaX = clientX - joystickStartX;
+    let deltaY = clientY - joystickStartY;
+    let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    // Limit thumb movement to maximum distance radius
+    if (distance > maxDistance) {
+        deltaX = (deltaX / distance) * maxDistance;
+        deltaY = (deltaY / distance) * maxDistance;
+        distance = maxDistance;
+    }
+
+    // Move the visual thumb element
+    joystickThumb.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+    // Normalize directional values between -1 and 1 for the game movement engine
+    if (distance > 10) { // Deadzone protection to avoid drift
+        inputDir.x = deltaX / maxDistance;
+        inputDir.y = deltaY / maxDistance;
         isWalking = true;
-        player.classList.add("walking");
-        if (inputDir.x < 0) player.style.transform = "scaleX(-1)";
-        if (inputDir.x > 0) player.style.transform = "scaleX(1)";
     } else {
+        inputDir.x = 0;
+        inputDir.y = 0;
         isWalking = false;
-        player.classList.remove("walking");
     }
 }
 
-function bindHoldControl(btnId, direction) {
-    const btn = document.getElementById(btnId);
+function handleJoystickEnd() {
+    joystickActive = false;
+    isWalking = false;
+    inputDir.x = 0;
+    inputDir.y = 0;
     
-    const startAction = (e) => {
-        e.preventDefault();
-        activeButtons.add(direction);
-        evaluateMovementVector();
-    };
-
-    const stopAction = (e) => {
-        activeButtons.delete(direction);
-        evaluateMovementVector();
-    };
-
-    btn.addEventListener("mousedown", startAction);
-    btn.addEventListener("touchstart", startAction, { passive: false });
-    btn.addEventListener("mouseup", stopAction);
-    btn.addEventListener("mouseleave", stopAction);
-    btn.addEventListener("touchend", stopAction);
+    // Snap thumb stick back to absolute center
+    joystickThumb.style.transform = 'translate(0px, 0px)';
 }
 
-bindHoldControl("btn-up", "up");
-bindHoldControl("btn-down", "down");
-bindHoldControl("btn-left", "left");
-bindHoldControl("btn-right", "right");
+// Event Listeners for Touch devices
+joystickContainer.addEventListener('touchstart', handleJoystickStart, { passive: false });
+window.addEventListener('touchmove', handleJoystickMove, { passive: false });
+window.addEventListener('touchend', handleJoystickEnd);
 
-window.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") activeButtons.add("up");
-    if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") activeButtons.add("down");
-    if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") activeButtons.add("left");
-    if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") activeButtons.add("right");
-    evaluateMovementVector();
-});
+// Event Listeners for PC Testing (Mouse Support)
+joystickContainer.addEventListener('mousedown', handleJoystickStart);
+window.addEventListener('mousemove', handleJoystickMove);
+window.addEventListener('mouseup', handleJoystickEnd);
 
-window.addEventListener("keyup", (e) => {
-    if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") activeButtons.delete("up");
-    if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") activeButtons.delete("down");
-    if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") activeButtons.delete("left");
-    if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") activeButtons.delete("right");
-    evaluateMovementVector();
-});
 
 // ============================================================================
 // MAIN GAME LOOP
