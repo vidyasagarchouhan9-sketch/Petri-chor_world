@@ -227,7 +227,7 @@ const miniCtx = minimapCanvas.getContext("2d");
 
 function updateMiniMap(){
     miniCtx.clearRect(0, 0, 120, 120);
-    const scale = 0.12;
+    const scale = 1.5;
 
     for(let y = 0; y < mapData.length; y++){
         for(let x = 0; x < mapData[y].length; x++){
