@@ -227,14 +227,14 @@ const miniCtx = minimapCanvas.getContext("2d");
 
 function updateMiniMap(){
     miniCtx.clearRect(0, 0, 120, 120);
-    const scale = 1.5;
+    const scale = 1.5; // Fixed from 0.12 so it spans completely across the 120px canvas
 
     for(let y = 0; y < mapData.length; y++){
         for(let x = 0; x < mapData[y].length; x++){
-            if(mapData[y][x] == 1){ // Fixed "map" reference crash
-                miniCtx.fillStyle = "#00ffff";
+            if(mapData[y][x] == 1){ 
+                miniCtx.fillStyle = "#00ffff"; // Cyan walls
             } else {
-                miniCtx.fillStyle = "#333";
+                miniCtx.fillStyle = "#1e293b"; // Clean modern floor space contrast color
             }
             miniCtx.fillRect(x * scale, y * scale, scale, scale);
         }
@@ -243,8 +243,8 @@ function updateMiniMap(){
     miniCtx.fillStyle = "red";
     miniCtx.beginPath();
     miniCtx.arc(
-        (playerX * scale) / TILE_SIZE,
-        (playerY * scale) / TILE_SIZE,
+        (playerX / TILE_SIZE) * scale,
+        (playerY / TILE_SIZE) * scale,
         3,
         0,
         Math.PI * 2
@@ -299,26 +299,51 @@ function updateDoors() {
     }
 }
 
-// ============================================================================\n// VIRTUAL JOYSTICK LOGIC\n// ============================================================================\nconst joystickContainer = document.getElementById('joystick-container');
+// ============================================================================
+// INPUT CONTROLLERS (VIRTUAL JOYSTICK & KEYBOARD ENGINE)
+// ============================================================================
+const joystickContainer = document.getElementById('joystick-container');
 const joystickBase = document.getElementById('joystick-base');
 const joystickThumb = document.getElementById('joystick-thumb');
 
 let joystickActive = false;
 let joystickStartX = 0;
 let joystickStartY = 0;
-
-// Maximum distance the thumb stick can slide from the center (in pixels)
 const maxDistance = 50; 
+
+// Track keyboard inputs perfectly alongside joystick
+const activeKeys = new Set();
+
+function evaluateKeyboardVector() {
+    // Only run keyboard inputs if joystick isn't actively being dragged
+    if (joystickActive) return;
+
+    inputDir.x = 0;
+    inputDir.y = 0;
+
+    if (activeKeys.has("up"))    inputDir.y = -1;
+    if (activeKeys.has("down"))  inputDir.y = 1;
+    if (activeKeys.has("left"))  inputDir.x = -1;
+    if (activeKeys.has("right")) inputDir.x = 1;
+
+    if (inputDir.x !== 0 || inputDir.y !== 0) {
+        isWalking = true;
+        player.classList.add("walking");
+        if (inputDir.x < 0) player.style.transform = "scaleX(-1)";
+        if (inputDir.x > 0) player.style.transform = "scaleX(1)";
+    } else {
+        isWalking = false;
+        player.classList.remove("walking");
+    }
+}
 
 function handleJoystickStart(e) {
     joystickActive = true;
-    isWalking = true;
+    player.classList.add("walking");
     
-    // Support both Touch events and Mouse clicks
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     
-    // Set center baseline position relative to the base circle
     const rect = joystickBase.getBoundingClientRect();
     joystickStartX = rect.left + rect.width / 2;
     joystickStartY = rect.top + rect.height / 2;
@@ -333,26 +358,25 @@ function handleJoystickMove(e) {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-    // Calculate distance from center
     let deltaX = clientX - joystickStartX;
     let deltaY = clientY - joystickStartY;
     let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-    // Limit thumb movement to maximum distance radius
     if (distance > maxDistance) {
         deltaX = (deltaX / distance) * maxDistance;
         deltaY = (deltaY / distance) * maxDistance;
         distance = maxDistance;
     }
 
-    // Move the visual thumb element
     joystickThumb.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
-    // Normalize directional values between -1 and 1 for the game movement engine
-    if (distance > 10) { // Deadzone protection to avoid drift
+    if (distance > 10) { 
         inputDir.x = deltaX / maxDistance;
         inputDir.y = deltaY / maxDistance;
         isWalking = true;
+        
+        if (inputDir.x < 0) player.style.transform = "scaleX(-1)";
+        if (inputDir.x > 0) player.style.transform = "scaleX(1)";
     } else {
         inputDir.x = 0;
         inputDir.y = 0;
@@ -365,21 +389,37 @@ function handleJoystickEnd() {
     isWalking = false;
     inputDir.x = 0;
     inputDir.y = 0;
-    
-    // Snap thumb stick back to absolute center
+    player.classList.remove("walking");
     joystickThumb.style.transform = 'translate(0px, 0px)';
+    evaluateKeyboardVector(); // Return control to keyboard checks if any keys were held
 }
 
-// Event Listeners for Touch devices
+// Touch listeners
 joystickContainer.addEventListener('touchstart', handleJoystickStart, { passive: false });
 window.addEventListener('touchmove', handleJoystickMove, { passive: false });
 window.addEventListener('touchend', handleJoystickEnd);
 
-// Event Listeners for PC Testing (Mouse Support)
+// Mouse listeners for browser testing
 joystickContainer.addEventListener('mousedown', handleJoystickStart);
 window.addEventListener('mousemove', handleJoystickMove);
 window.addEventListener('mouseup', handleJoystickEnd);
 
+// Keyboard listeners
+window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") activeKeys.add("up");
+    if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") activeKeys.add("down");
+    if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") activeKeys.add("left");
+    if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") activeKeys.add("right");
+    evaluateKeyboardVector();
+});
+
+window.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") activeKeys.delete("up");
+    if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") activeKeys.delete("down");
+    if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") activeKeys.delete("left");
+    if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") activeKeys.delete("right");
+    evaluateKeyboardVector();
+});
 
 // ============================================================================
 // MAIN GAME LOOP
@@ -408,10 +448,8 @@ function gameLoop(currentTime) {
         
         updateDoors();
         checkRoomEntry();
-        
-        // Move the minimap update HERE so it only draws when moving
-        updateMiniMap(); 
-    }
+        updateMiniMap(); // Optimized: Only redraw mini-map grid when coordinates change!
+    } 
 
     // Smooth Lerp Camera Follow System
     let targetCamX = game.clientWidth / 2 - playerX - 30;
@@ -425,8 +463,7 @@ function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
 }
 
-
-// Start game ticks
+// Start game loops
 requestAnimationFrame(gameLoop);
 
 window.addEventListener("resize", () => {
