@@ -300,6 +300,111 @@ function updateDoors() {
 }
 
 // ============================================================================
+// INVENTORY & ITEM INTERACTION SYSTEM
+// ============================================================================
+const playerInventory = [];
+let nearbyItem = null; // Stores item location data { row, col, type }
+
+const actionContainer = document.getElementById("action-container");
+const btnAction = document.getElementById("btn-action");
+const inventoryList = document.getElementById("inventory-list");
+
+// Scan the area directly in front/around the player for crates or terminals
+function checkNearbyItems() {
+    const pCenterX = playerX + 30;
+    const pCenterY = playerY + 30;
+    
+    let closestItem = null;
+    let minDistance = TILE_SIZE * 1.5; // Radius distance to trigger the hand button
+
+    // Scan nearby tile indices to save processing loops
+    const startRow = Math.max(0, Math.floor(playerY / TILE_SIZE) - 2);
+    const endRow = Math.min(mapData.length - 1, Math.floor(playerY / TILE_SIZE) + 2);
+    const startCol = Math.max(0, Math.floor(playerX / TILE_SIZE) - 2);
+    const endCol = Math.min(mapData[0].length - 1, Math.floor(playerX / TILE_SIZE) + 2);
+
+    for (let r = startRow; r <= endRow; r++) {
+        for (let c = startCol; c <= endCol; c++) {
+            const tileType = mapData[r][c];
+            
+            // Look for interactive objects: CRATE (5) or TERMINAL (4)
+            if (tileType === CRATE || tileType === TERMINAL) {
+                const itemCenterX = c * TILE_SIZE + 25;
+                const itemCenterY = r * TILE_SIZE + 25;
+                const dist = Math.hypot(pCenterX - itemCenterX, pCenterY - itemCenterY);
+
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestItem = { row: r, col: c, type: tileType };
+                }
+            }
+        }
+    }
+
+    nearbyItem = closestItem;
+
+    // Show or hide the Hand Action button based on proximity
+    if (nearbyItem) {
+        if (nearbyItem.type === CRATE) btnAction.textContent = "🖐️ PICK UP CRATE";
+        if (nearbyItem.type === TERMINAL) btnAction.textContent = "🖐️ ACCESS DATA";
+        actionContainer.classList.remove("hidden");
+    } else {
+        actionContainer.classList.add("hidden");
+    }
+}
+
+// Handle the interaction action click
+if (btnAction) {
+    btnAction.addEventListener("click", () => {
+        if (!nearbyItem) return;
+
+        const { row, col, type } = nearbyItem;
+        let itemName = "";
+
+        if (type === CRATE) {
+            itemName = `📦 Cargo Crate [${row},${col}]`;
+            // Change tile to FLOOR (0) in data grid so it vanishes visually from the map
+            mapData[row][col] = FLOOR;
+            
+            // Clear visual class from the DOM element grid
+            const tileIndex = row * mapData[0].length + col;
+            const tileDOM = mapContainer.children[tileIndex];
+            if (tileDOM) {
+                tileDOM.className = "tile floor";
+            }
+        } else if (type === TERMINAL) {
+            itemName = `💾 Core Data Link`;
+            // Keep the terminal on screen, but you can only download from it once!
+            // Change its map data type to a static DECOR (9) so it can't be reused
+            mapData[row][col] = DECOR; 
+        }
+
+        // Add to array state
+        playerInventory.push(itemName);
+        updateInventoryHUD();
+
+        // Re-check loops immediately to hide button since item was taken
+        checkNearbyItems();
+        updateMiniMap(); // Keep map visuals updated if objects are cleared
+    });
+}
+
+function updateInventoryHUD() {
+    inventoryList.innerHTML = "";
+    if (playerInventory.length === 0) {
+        inventoryList.innerHTML = '<li class="empty-msg">Empty</li>';
+        return;
+    }
+    playerInventory.forEach(item => {
+        const li = document.createElement("li");
+        li.className = "inventory-item";
+        li.textContent = item;
+        inventoryList.appendChild(li);
+    });
+    }
+
+
+// ============================================================================
 // INPUT CONTROLLERS (VIRTUAL JOYSTICK & KEYBOARD ENGINE)
 // ============================================================================
 const joystickContainer = document.getElementById('joystick-container');
