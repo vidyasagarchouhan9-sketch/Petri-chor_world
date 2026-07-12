@@ -393,9 +393,12 @@ function gameLoop(currentTime) {
         
         updateDoors();
         checkRoomEntry();
-    } // Fixed missing closing brace for walking state
+        
+        // Move the minimap update HERE so it only draws when moving
+        updateMiniMap(); 
+    }
 
-    // Smooth Lerp Camera Follow System (Now updates continuously)
+    // Smooth Lerp Camera Follow System
     let targetCamX = game.clientWidth / 2 - playerX - 30;
     let targetCamY = game.clientHeight / 2 - playerY - 30;
 
@@ -403,10 +406,10 @@ function gameLoop(currentTime) {
     camY += (targetCamY - camY) * CAMERA_LERP;
 
     world.style.transform = `translate(${camX}px, ${camY}px)`;
-    updateMiniMap();
 
     requestAnimationFrame(gameLoop);
 }
+
 
 // Start game ticks
 requestAnimationFrame(gameLoop);
