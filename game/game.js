@@ -302,6 +302,21 @@ function updateDoors() {
 // ============================================================================
 // INVENTORY & ITEM INTERACTION SYSTEM
 // ============================================================================
+// 1. Drop Pool Database
+const itemDropPool = [
+    "💳 Admin Security ID Card",
+    "🔧 Titanium Multitool Wrench",
+    "🔋 High-Capacity Plasma Battery",
+    "🧪 Glowing Alien Bio-Sample",
+    "💾 Encrypted Mainframe Data Drive",
+    "🩺 Advanced Medical Scanner",
+    "🌌 Anti-Gravity Boots Element",
+    "🛰️ Communications Hub Backup Fuse",
+    "☕ Spaceship Crew's Lost Coffee Mug",
+    "💎 Rare Asteroid Crystal Fragment"
+];
+
+// 2. State & DOM Elements Tracking
 const playerInventory = [];
 let nearbyItem = null; // Stores item location data { row, col, type }
 
@@ -362,7 +377,10 @@ if (btnAction) {
         let itemName = "";
 
         if (type === CRATE) {
-            itemName = `📦 Cargo Crate [${row},${col}]`;
+            // Pick a completely random item from our unique list!
+            const randomIndex = Math.floor(Math.random() * itemDropPool.length);
+            itemName = itemDropPool[randomIndex];
+            
             // Change tile to FLOOR (0) in data grid so it vanishes visually from the map
             mapData[row][col] = FLOOR;
             
@@ -373,7 +391,7 @@ if (btnAction) {
                 tileDOM.className = "tile floor";
             }
         } else if (type === TERMINAL) {
-            itemName = `💾 Core Data Link`;
+            itemName = `💾 Downloaded Security Logs`;
             // Keep the terminal on screen, but you can only download from it once!
             // Change its map data type to a static DECOR (9) so it can't be reused
             mapData[row][col] = DECOR; 
@@ -401,7 +419,8 @@ function updateInventoryHUD() {
         li.textContent = item;
         inventoryList.appendChild(li);
     });
-    }
+}
+  
 
 
 // ============================================================================
@@ -553,6 +572,7 @@ function gameLoop(currentTime) {
         
         updateDoors();
         checkRoomEntry();
+      checkNearbyItems();
         updateMiniMap(); // Optimized: Only redraw mini-map grid when coordinates change!
     } 
 
