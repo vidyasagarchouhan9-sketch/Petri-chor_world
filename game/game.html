@@ -480,6 +480,53 @@ world.style.transform = `translate(${camX}px, ${camY}px)`;
 
 // Announce the starting room right away
 checkRoomEntry();
+  const minimapCanvas = document.getElementById("minimapCanvas");
+const miniCtx = minimapCanvas.getContext("2d");
+
+function updateMiniMap(){
+
+    miniCtx.clearRect(0,0,120,120);
+
+    const scale = 0.12;
+
+    for(let y=0;y<mapData.length;y++){
+
+        for(let x=0;x<mapData[y].length;x++){
+
+            if(map[y][x]==1){
+
+                miniCtx.fillStyle="#00ffff";
+
+            }else{
+
+                miniCtx.fillStyle="#333";
+
+            }
+
+            miniCtx.fillRect(
+                x*scale,
+                y*scale,
+                scale,
+                scale
+            );
+        }
+    }
+
+    miniCtx.fillStyle="red";
+
+    miniCtx.beginPath();
+
+    miniCtx.arc(
+    playerX * scale / TILE_SIZE,
+    playerY * scale / TILE_SIZE,
+        3,
+        0,
+        Math.PI*2
+    );
+
+    miniCtx.fill();
+
+}
 
 // ============================================================================
 // SYSTEM ENGINE LOGIC (COLLISION & AUTOMATIC DOORS)
@@ -620,53 +667,7 @@ function gameLoop(currentTime) {
         
         updateDoors();
         checkRoomEntry();
-      const minimapCanvas = document.getElementById("minimapCanvas");
-const miniCtx = minimapCanvas.getContext("2d");
-
-function updateMiniMap(){
-
-    miniCtx.clearRect(0,0,120,120);
-
-    const scale = 0.12;
-
-    for(let y=0;y<map.length;y++){
-
-        for(let x=0;x<map[y].length;x++){
-
-            if(map[y][x]==1){
-
-                miniCtx.fillStyle="#00ffff";
-
-            }else{
-
-                miniCtx.fillStyle="#333";
-
-            }
-
-            miniCtx.fillRect(
-                x*scale,
-                y*scale,
-                scale,
-                scale
-            );
-        }
-    }
-
-    miniCtx.fillStyle="red";
-
-    miniCtx.beginPath();
-
-    miniCtx.arc(
-        player.x*scale,
-        player.y*scale,
-        3,
-        0,
-        Math.PI*2
-    );
-
-    miniCtx.fill();
-}
-    }
+      
 
     // Smooth Lerp Camera Follow System
     let targetCamX = game.clientWidth / 2 - playerX - 30;
