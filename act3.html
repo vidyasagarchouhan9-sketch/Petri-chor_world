@@ -1,60 +1,192 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi-latn">
 <head>
-<title>Act III — The Villain's Plan</title>
-<style>
-body{
-background:black;
-color:white;
-font-family:Arial;
-max-width:800px;
-margin:auto;
-padding:20px;
-line-height:1.6;
-}
-h1{
-color:#00f0ff;
-text-shadow:0 0 10px #00f0ff;
-}
-a{
-color:#00f0ff;
-text-decoration:none;
-margin-right:20px;
-font-weight:bold;
-}
-.nav{
-margin-top:30px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Act III — The Villain's Plan | Petri-Chor</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Global design variables reused across all interactive book chapters */
+    :root {
+      --cyan-glow: #00f2fe;
+      --cyan-dim: #00b4db;
+      --neon-magenta: #ff00ff;
+      --bg-dark: #060913;
+      --card-bg: rgba(11, 19, 43, 0.55);
+      --text-main: #f0f4f8;
+      --text-muted: #8fa0b5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.25rem;
+      line-height: 1.8;
+      color: var(--text-main);
+      background-color: var(--bg-dark);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(0, 242, 254, 0.05), transparent 60%),
+                  linear-gradient(180deg, rgba(6, 9, 19, 0.85) 0%, rgba(6, 9, 19, 0.95) 100%);
+      z-index: -1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 750px;
+      margin: 40px auto;
+      padding: 40px 30px;
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 242, 254, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+      margin-bottom: 35px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .story-content {
+      margin-bottom: 40px;
+      text-align: left;
+    }
+
+    .story-content p {
+      margin-bottom: 20px;
+    }
+
+    .dialogue {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #fff;
+      border-left: 3px solid var(--cyan-glow);
+      padding-left: 15px;
+      margin: 25px 0;
+      font-style: italic;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.3), transparent);
+      margin: 30px 0 20px 0;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 24px;
+      background: rgba(11, 19, 43, 0.6);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+      background: rgba(0, 242, 254, 0.1);
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+      transform: translateY(-1px);
+      color: var(--cyan-glow);
+    }
+
+    .nav-btn.next {
+      background: linear-gradient(135deg, var(--cyan-dim), var(--cyan-glow));
+      color: #060913;
+      border: none;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    }
+
+    .nav-btn.next:hover {
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+      filter: brightness(1.1);
+      color: #060913;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px 10px;
+        padding: 30px 20px;
+      }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
 </head>
 <body>
 
-<h1>🎭 ACT III — THE VILLAIN'S PLAN</h1>
+  <div class="container">
+    <h1>🎭 ACT III — THE VILLAIN'S PLAN</h1>
 
-<p>
-Deep underground, Petri-Chor reveals a giant hologram of the Maharajas' Express.<br><br>
+    <div class="story-content">
+      <p>Deep underground, Petri-Chor reveals a giant hologram of the Maharajas' Express.</p>
 
-His crew watches in amazement.<br><br>
+      <p>His crew watches in amazement.</p>
 
-"Tonight we steal the train."<br><br>
+      <div class="dialogue">"Tonight we steal the train."</div>
 
-Behind him stand enormous machines, robots, and anti-gravity engines.<br><br>
+      <p>Behind him stand enormous machines, robots, and anti-gravity engines.</p>
 
-"Why not rob a bank?" asks a henchman.<br><br>
+      <div class="dialogue">"Why not rob a bank?" asks a henchman.</div>
 
-"Because trains are cooler."<br><br>
+      <div class="dialogue">"Because trains are cooler."</div>
 
-Everyone agrees.
-</p>
+      <p>Everyone agrees.</p>
+    </div>
 
-<hr>
+    <hr>
 
-<div class="nav">
-<a href="act2.html">⬅ Previous</a>
-<a href="index.html">🏠 Home</a>
-<a href="act4.html">Next ➡</a>
-</div>
-  <a href="bot3.html" style="position:absolute;top:900px;left:500px;font-size:11px;opacity:0.14;text-decoration:none;">🤖</a>
+    <div class="nav">
+      <a href="act2.html" class="nav-btn">⬅ Previous</a>
+      <a href="index.html" class="nav-btn">🏠 Home</a>
+      <a href="act4.html" class="nav-btn next">Next ➡</a>
+    </div>
+  </div>
 
 </body>
 </html>
