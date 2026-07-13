@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Aurora Space Station Demo</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:
+linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.75)),
+url("https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1400&q=80");
+background-size:cover;
+background-position:center;
+overflow:hidden;
+color:white;
+}
+
+.panel{
+width:90%;
+max-width:700px;
+padding:40px;
+text-align:center;
+background:rgba(0,0,0,.45);
+border:2px solid cyan;
+border-radius:20px;
+backdrop-filter:blur(10px);
+box-shadow:0 0 30px cyan;
+}
+
+h1{
+font-size:46px;
+color:cyan;
+text-shadow:0 0 15px cyan;
+margin-bottom:15px;
+}
+
+h2{
+font-size:22px;
+margin-bottom:20px;
+color:#ddd;
+}
+
+p{
+font-size:18px;
+line-height:1.7;
+margin-bottom:30px;
+color:#eee;
+}
+
+.features{
+text-align:left;
+display:inline-block;
+margin-bottom:35px;
+font-size:18px;
+line-height:2;
+}
+
+button{
+padding:18px 40px;
+font-size:24px;
+border:none;
+border-radius:15px;
+cursor:pointer;
+background:cyan;
+color:black;
+font-weight:bold;
+box-shadow:0 0 25px cyan;
+transition:.25s;
+}
+
+button:hover{
+transform:scale(1.08);
+box-shadow:0 0 45px cyan;
+}
+
+.small{
+margin-top:25px;
+font-size:14px;
+color:#bbb;
+}
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+<h1>🚀 AURORA SPACE STATION</h1>
+
+<h2>Interactive Demo</h2>
+
+<p>
+Welcome aboard Commander!
+Explore the mysterious Aurora Space Station,
+discover hidden rooms, collect items and uncover secrets.
+</p>
+
+<div class="features">
+✅ Smooth Camera<br>
+✅ Sliding Doors<br>
+✅ Live Minimap<br>
+✅ Interactive Crates<br>
+✅ Inventory System<br>
+✅ Hidden Secrets
+</div>
+
+<br>
+
+<a href="game/index.html" class="play-btn">
+    🚀 PLAY DEMO
+</a>
+
+<div class="small">
+Petri-Chor Universe Demo • Version 0.1
+</div>
+
+</div>
+
+<script>
+function startGame(){
+window.location.href="index.html";
+}
+</script>
+
+</body>
+</html>
