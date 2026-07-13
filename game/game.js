@@ -322,7 +322,7 @@ let nearbyItem = null; // Stores item location data { row, col, type }
 
 const actionContainer = document.getElementById("action-container");
 const btnAction = document.getElementById("btn-action");
-const inventoryList = document.getElementById("inventory-list");
+const bagGrid = document.getElementById("bag-grid");
 
 // Scan the area directly in front/around the player for crates or terminals
 function checkNearbyItems() {
@@ -407,18 +407,25 @@ if (btnAction) {
     });
 }
 
+const bagGrid = document.getElementById("bag-grid");
+
 function updateInventoryHUD() {
-    inventoryList.innerHTML = "";
-    if (playerInventory.length === 0) {
-        inventoryList.innerHTML = '<li class="empty-msg">Empty</li>';
-        return;
+
+    bagGrid.innerHTML = "";
+
+    for(let i = 0; i < 27; i++){
+
+        const slot = document.createElement("div");
+        slot.className = "bag-slot";
+
+        if(playerInventory[i]){
+            slot.textContent = playerInventory[i];
+            slot.draggable = true;
+        }
+
+        bagGrid.appendChild(slot);
     }
-    playerInventory.forEach(item => {
-        const li = document.createElement("li");
-        li.className = "inventory-item";
-        li.textContent = item;
-        inventoryList.appendChild(li);
-    });
+
 }
   
 
