@@ -401,15 +401,14 @@ if (btnAction) {
         playerInventory.push(itemName);
         updateInventoryHUD();
 
-        // Re-check loops immediately to hide button since item was taken
+                // Re-check loops immediately to hide button since item was taken
         checkNearbyItems();
         updateMiniMap(); // Keep map visuals updated if objects are cleared
     });
 }
 
-const bagGrid = document.getElementById("bag-grid");
-
 function updateInventoryHUD() {
+  
 
     bagGrid.innerHTML = "";
 
