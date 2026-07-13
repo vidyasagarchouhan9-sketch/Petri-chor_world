@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#060913">
   
   <meta name="google-site-verification" content="Sg4HdryuXbN0RKz9VROmMCWW2xCMgpUEMIoPkJe9nus" />
   <title>Petri-Chor: The Maharaja’s Express Heist | Sci-Fi Mystery Story by Vidyasagar</title>
@@ -34,6 +34,10 @@
   <meta name="twitter:image" content="https://vidyasagarchouhan9-sketch.github.io/Petri-chor_world/petri-chor-cover.jpg">
   
   <link rel="canonical" href="https://vidyasagarchouhan9-sketch.github.io/Petri-chor_world/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
   <script type="application/ld+json">
   {
@@ -78,13 +82,30 @@
   </script>
 
   <style>
-    body {
+    :root {
+      --cyan-glow: #00f2fe;
+      --cyan-dim: #00b4db;
+      --neon-magenta: #ff00ff;
+      --bg-dark: #060913;
+      --card-bg: rgba(11, 19, 43, 0.55);
+      --text-main: #f0f4f8;
+      --text-muted: #8fa0b5;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: Arial, sans-serif;
-      color: white;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: var(--text-main);
       text-align: center;
       overflow-x: hidden;
-      background-color: black;
+      background-color: var(--bg-dark);
       background-image: url("petri-chor-cover.jpg");
       background-size: cover;
       background-position: center;
@@ -99,11 +120,11 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: linear-gradient(180deg, rgba(6, 9, 19, 0.75) 0%, rgba(6, 9, 19, 0.9) 100%);
       z-index: -1;
     }
 
-    /* 🌌 Stars */
+    /* 🌌 Stars Background Layering */
     .stars, .stars2, .stars3 {
       position: fixed;
       width: 100%;
@@ -113,164 +134,285 @@
 
     .stars {
       background: url('star.png');
-      animation: moveStars 100s linear infinite;
+      animation: moveStars 120s linear infinite;
     }
 
     .stars2 {
       background: url('star.png');
-      animation: moveStars 150s linear infinite;
+      animation: moveStars 180s linear infinite;
       opacity: 0.5;
     }
 
     .stars3 {
       background: url('star.png');
-      animation: moveStars 200s linear infinite;
+      animation: moveStars 240s linear infinite;
       opacity: 0.3;
     }
 
     @keyframes moveStars {
-      from {transform: translateY(0);}
-      to {transform: translateY(-2000px);}
+      from { transform: translateY(0); }
+      to { transform: translateY(-2000px); }
     }
 
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    /* Header and Typography */
     h1 {
-      margin-top: 50px;
-      color: #00f0ff;
-      text-shadow: 0 0 15px #00f0ff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .tagline {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffd700;
+      text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+      margin-bottom: 5px;
     }
 
     h3 {
-      color: #ff66ff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--neon-magenta);
+      text-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
+      margin-bottom: 30px;
     }
 
-    /* 📚 Chapter buttons */
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #fff;
+      margin: 40px 0 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    h2::before, h2::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.3), transparent);
+    }
+
+    .intro-text {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 242, 254, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 25px;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Universal Component Action Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 30px;
+      background: linear-gradient(135deg, var(--cyan-dim), var(--cyan-glow));
+      color: #060913;
+      text-decoration: none;
+      border-radius: 12px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      margin: 10px 0;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
+      filter: brightness(1.1);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #bd00dd, var(--neon-magenta));
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+    }
+
+    .btn-secondary:hover {
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
+    }
+
+    /* 📚 Chapter Grid System Layout */
     .chapter-box {
-      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
     }
 
     .chapter-btn {
-      display: block;
-      width: 220px;
-      margin: 10px auto;
-      padding: 12px;
-      background: linear-gradient(45deg, #00f0ff, #ff00ff);
-      color: white;
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      background: rgba(11, 19, 43, 0.5);
+      color: #fff;
       text-decoration: none;
       border-radius: 10px;
-      font-weight: bold;
-      box-shadow: 0 0 10px #00f0ff;
+      font-weight: 600;
+      font-size: 1.05rem;
+      border: 1px solid rgba(0, 242, 254, 0.15);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: all 0.25s ease;
+      text-align: left;
     }
 
     .chapter-btn:hover {
-      transform: scale(1.05);
+      background: rgba(11, 19, 43, 0.8);
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+      transform: translateX(4px);
+      color: var(--cyan-glow);
     }
 
-    /* ⭐ Button */
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: linear-gradient(45deg, #00f0ff, #ff00ff);
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    /* 🚂 Train */
-    .train {
-      position: absolute;
-      bottom: 10px;
-      left: -200px;
-      font-size: 40px;
-      animation: moveTrain 12s linear infinite;
-    }
-
-    @keyframes moveTrain {
-      0% {left: -200px;}
-      100% {left: 110%;}
-    }
-
+    /* 🔔 Dynamic Top Fixed Utilities */
     .notice-btn {
       position: fixed;
-      top: 10px;
-      right: 10px;
-      width: 70px;
-      height: 70px;
+      top: 20px;
+      right: 20px;
+      width: 54px;
+      height: 54px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 42px;
+      font-size: 24px;
       text-decoration: none;
+      background: rgba(6, 9, 19, 0.6);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 50%;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
       z-index: 9999;
+      transition: all 0.3s ease;
+    }
+
+    .notice-btn:hover {
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      transform: scale(1.05);
     }
 
     .badge {
       position: absolute;
-      top: 6px;
-      right: 6px;
-      width: 24px;
-      height: 24px;
+      top: -2px;
+      right: -2px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: #ff0000;
+      background: #ff0055;
       color: #ffffff;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: bold;
+      font-family: 'Orbitron', sans-serif;
       display: none;
       justify-content: center;
       align-items: center;
       border: 2px solid #ffffff;
-    }
-    .transmission-btn{
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    display:flex;
-    align-items:center;
-    background:#00d9ff;
-    color:white;
-    border-radius:40px;
-    padding:15px;
-    text-decoration:none;
-    overflow:hidden;
-    box-shadow:0 0 20px cyan;
-    z-index:9999;
-}
-
-.icon{
-    font-size:36px;
-}
-
-.label{
-    white-space:nowrap;
-    max-width:0;
-    opacity:0;
-    overflow:hidden;
-    margin-left:0;
-    animation:slideText 4s infinite;
-}
-
-@keyframes slideText{
-
-    0%,20%{
-        max-width:0;
-        opacity:0;
-        margin-left:0;
+      box-shadow: 0 0 8px #ff0055;
     }
 
-    30%,70%{
-        max-width:180px;
-        opacity:1;
-        margin-left:12px;
+    /* 📡 Signal Transmission Interface Link Component */
+    .transmission-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      background: rgba(6, 9, 19, 0.8);
+      border: 1px solid var(--cyan-glow);
+      color: white;
+      border-radius: 40px;
+      padding: 10px 14px;
+      text-decoration: none;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+      z-index: 9999;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
     }
 
-    80%,100%{
-        max-width:0;
-        opacity:0;
-        margin-left:0;
+    .transmission-btn:hover {
+      box-shadow: 0 0 30px var(--cyan-glow);
+      background: var(--bg-dark);
     }
 
-}
+    .icon {
+      font-size: 26px;
+    }
+
+    .label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      margin-left: 0;
+      animation: slideText 4s infinite;
+    }
+
+    @keyframes slideText {
+      0%, 20% { max-width: 0; opacity: 0; margin-left: 0; }
+      30%, 70% { max-width: 120px; opacity: 1; margin-left: 8px; }
+      80%, 100% { max-width: 0; opacity: 0; margin-left: 0; }
+    }
+
+    /* 🚂 Ambient Decorative System Train Element */
+    .train {
+      position: fixed;
+      bottom: 10px;
+      left: -200px;
+      font-size: 32px;
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: -1;
+      animation: moveTrain 16s linear infinite;
+    }
+
+    @keyframes moveTrain {
+      0% { left: -200px; }
+      100% { left: 110%; }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .container { padding: 40px 15px; }
+      .chapter-box { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -279,60 +421,62 @@
   <div class="stars2"></div>
   <div class="stars3"></div> 
 
+  <div class="train">🚂💨</div>
+
   <a href="notice.html" class="notice-btn" aria-label="Notices">
     🔔
     <span id="badge" class="badge"></span>
   </a>
 
-  <h1>Petri-Chor: The Maharaja's Express Heist</h1>
-  <p style="font-size:20px; color:#ffd700; text-shadow:0 0 10px #ffd700;">
-    🚂 A Hinglish Sci-Fi Mystery Adventure 🌌
-  </p>
-  <h3>by Vidyasagar</h3> 
-  
-  <p>
-    Petri-Chor: The Maharaja’s Express Heist is a sci-fi mystery adventure story created by Vidyasagar. It combines science, space travel, comedy, and a thrilling railway heist universe.
-  </p>
-  <p>Welcome to your interactive book universe 🌌📖</p>
-  
-  <h2>🎭 Story Acts</h2>
+  <div class="container">
+    <header>
+      <h1>Petri-Chor: The Maharaja's Express Heist</h1>
+      <div class="tagline">🚂 A Hinglish Sci-Fi Mystery Adventure 🌌</div>
+      <h3>by Vidyasagar</h3> 
+    </header>
     
-  <a class="btn" href="act1.html">📖 Start Reading</a>
-  
-  <div class="chapter-box">
-    <a class="chapter-btn" href="act1.html">🎭 Act I — The Rain</a>
-    <a class="chapter-btn" href="act2.html">🎭 Act II — The Scientist's Journey</a>
-    <a class="chapter-btn" href="act3.html">🎭 Act III — The Villain's Plan</a>
-    <a class="chapter-btn" href="act4.html">🎭 Act IV — Distraction</a>
-    <a class="chapter-btn" href="act5.html">🎭 Act V — The Heist</a>
-    <a class="chapter-btn" href="act6.html">🎭 Act VI — The Disappearance</a>
-    <a class="chapter-btn" href="act7.html">🎭 Act VII — Grandpa Waits</a>
-    <a class="chapter-btn" href="act8.html">🎭 Act VIII — The Awakening</a>
-    <a class="chapter-btn" href="act9.html">🎭 Act IX — The Moon</a>
-    <a class="chapter-btn" href="act10.html">🎭 Act X — The Chase</a>
-    <a class="chapter-btn" href="act11.html">🎭 Act XI — The Secret</a>
-    <a class="chapter-btn" href="act12.html">🎭 Act XII — The Final Reveal</a>
-    <a class="chapter-btn" href="act13.html">🎭 Act XIII — Grandpa's House</a>
+    <div class="intro-text">
+      Petri-Chor: The Maharaja’s Express Heist is a sci-fi mystery adventure story created by Vidyasagar. It combines science, space travel, comedy, and a thrilling railway heist universe.
+      <div style="margin-top: 15px; font-size: 1rem; color: var(--cyan-glow); font-family: 'Orbitron';">Welcome to your interactive book universe 🌌📖</div>
+    </div>
+    
+    <h2>🎭 Story Acts</h2>
+    <a class="btn" href="act1.html" style="margin-bottom: 20px; width: 100%; max-width: 300px;">📖 Start Reading</a>
+    
+    <div class="chapter-box">
+      <a class="chapter-btn" href="act1.html">🎭 Act I — The Rain</a>
+      <a class="chapter-btn" href="act2.html">🎭 Act II — The Scientist's Journey</a>
+      <a class="chapter-btn" href="act3.html">🎭 Act III — The Villain's Plan</a>
+      <a class="chapter-btn" href="act4.html">🎭 Act IV — Distraction</a>
+      <a class="chapter-btn" href="act5.html">🎭 Act V — The Heist</a>
+      <a class="chapter-btn" href="act6.html">🎭 Act VI — The Disappearance</a>
+      <a class="chapter-btn" href="act7.html">🎭 Act VII — Grandpa Waits</a>
+      <a class="chapter-btn" href="act8.html">🎭 Act VIII — The Awakening</a>
+      <a class="chapter-btn" href="act9.html">🎭 Act IX — The Moon</a>
+      <a class="chapter-btn" href="act10.html">🎭 Act X — The Chase</a>
+      <a class="chapter-btn" href="act11.html">🎭 Act XI — The Secret</a>
+      <a class="chapter-btn" href="act12.html">🎭 Act XII — The Final Reveal</a>
+      <a class="chapter-btn" href="act13.html">🎭 Act XIII — Grandpa's House</a>
+    </div>
+
+    <h2>🔒 Classified</h2>
+    <a class="btn btn-secondary" href="reward.html">🔒 Only True Bot Hunters May Enter</a>
+    
+    <h2>📖 Alternative Reading</h2>
+    <a class="btn" href="https://drive.google.com/file/d/17A5P8U9ZqXiOGg0JDque86QsGIGD0eYx/view?usp=drivesdk" target="_blank">📖 Read the Full PDF Book</a>
+    
+    <h2>⭐ Your Feedback</h2>
+    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLScPO-WfHPqqgmosn17KAykWz2Ru7OkcJxZqqTM1D1oFT10Q-g/viewform?usp=publish-editor">⭐ Leave Feedback</a>
+
+    <h2>🎮 Gamers Only</h2>
+    <a class="btn" href="demo.html" style="background: linear-gradient(135deg, #00b4db, #00f2fe);">🎮 Aurora Space Station Game Demo</a>
   </div>
-
-  <br>
-  <a class="btn" href="reward.html">🔒 Only True Bot Hunters May Enter</a>
-  
-  <h2>👇for pdf reading👇</h2>
-  <a class="btn" href="https://drive.google.com/file/d/17A5P8U9ZqXiOGg0JDque86QsGIGD0eYx/view?usp=drivesdk" target="_blank">📖 Read the Full Book</a>
-  
-  <h2>⭐ feedback please</h2>
-  <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLScPO-WfHPqqgmosn17KAykWz2Ru7OkcJxZqqTM1D1oFT10Q-g/viewform?usp=publish-editor">⭐ Feedback</a>
-
-  <h2>👇 Gamers Only 👇</h2>
-  <a class="btn" href="demo.html">🎮 Aurora Space Station game demo</a>
 
   <a href="https://vidyasagarchouhan9-sketch.github.io/Petri-chor_world/control-room/index.html" class="transmission-btn">
     <span class="icon">📡</span>
     <span class="label">Transmission</span>
   </a>
 
-  
   <script type="text/javascript">
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js");
@@ -341,5 +485,4 @@
 
   <script src="script.js"></script> 
 </body>
-    </html>
-    
+</html>
