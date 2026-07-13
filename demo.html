@@ -1,137 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Aurora Space Station Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Space Station Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-glow: #00f2fe;
+            --cyan-dim: #00b4db;
+            --bg-dark: #050811;
+            --panel-bg: rgba(6, 12, 26, 0.65);
+            --text-main: #f0f5fa;
+            --text-muted: #8fa5c0;
+        }
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:
-linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.75)),
-url("https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1400&q=80");
-background-size:cover;
-background-position:center;
-    overflow-x:hidden;
-    overflow-y:auto;
-color:white;
-}
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: 
+                radial-gradient(circle at center, rgba(0, 242, 254, 0.1) 0%, transparent 70%),
+                linear-gradient(rgba(5, 8, 17, 0.75), rgba(5, 8, 17, 0.85)),
+                url("https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1400&q=80");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif;
+            padding: 20px;
+        }
 
-.panel{
-width:90%;
-max-width:700px;
-padding:40px;
-text-align:center;
-background:rgba(0,0,0,.45);
-border:2px solid cyan;
-border-radius:20px;
-backdrop-filter:blur(10px);
-box-shadow:0 0 30px cyan;
-}
+        .panel {
+            width: 100%;
+            max-width: 650px;
+            padding: 50px 40px;
+            text-align: center;
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 24px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 
+                0 0 40px rgba(0, 242, 254, 0.15),
+                inset 0 0 20px rgba(0, 242, 254, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
 
-h1{
-font-size:46px;
-color:cyan;
-text-shadow:0 0 15px cyan;
-margin-bottom:15px;
-}
+        /* Sci-fi corner accents */
+        .panel::before, .panel::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-color: var(--cyan-glow);
+            border-style: solid;
+            opacity: 0.6;
+        }
+        .panel::before {
+            top: 15px;
+            left: 15px;
+            border-width: 2px 0 0 2px;
+        }
+        .panel::after {
+            bottom: 15px;
+            right: 15px;
+            border-width: 0 2px 2px 0;
+        }
 
-h2{
-font-size:22px;
-margin-bottom:20px;
-color:#ddd;
-}
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+            margin-bottom: 8px;
+        }
 
-p{
-font-size:18px;
-line-height:1.7;
-margin-bottom:30px;
-color:#eee;
-}
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-glow);
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
 
-.features{
-text-align:left;
-display:inline-block;
-margin-bottom:35px;
-font-size:18px;
-line-height:2;
-}
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            color: var(--text-main);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-button{
-padding:18px 40px;
-font-size:24px;
-border:none;
-border-radius:15px;
-cursor:pointer;
-background:cyan;
-color:black;
-font-weight:bold;
-box-shadow:0 0 25px cyan;
-transition:.25s;
-}
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 480px;
+            margin: 0 auto 40px auto;
+            text-align: left;
+        }
 
-button:hover{
-transform:scale(1.08);
-box-shadow:0 0 45px cyan;
-}
+        .feature-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 242, 254, 0.1);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
 
-.small{
-margin-top:25px;
-font-size:14px;
-color:#bbb;
-}
-</style>
+        .feature-item span {
+            color: var(--cyan-glow);
+        }
+
+        .panel:hover .feature-item {
+            border-color: rgba(0, 242, 254, 0.25);
+            background: rgba(0, 242, 254, 0.02);
+        }
+
+        .play-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 45px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-decoration: none;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background: linear-gradient(90deg, var(--cyan-dim), var(--cyan-glow));
+            color: #050811;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            letter-spacing: 1px;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.7);
+            filter: brightness(1.1);
+        }
+
+        .small {
+            margin-top: 35px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 500px) {
+            .panel {
+                padding: 35px 20px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .play-btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="panel">
 
-<h1>🚀 AURORA SPACE STATION</h1>
+    <h1>🚀 AURORA SPACE STATION</h1>
+    <h2>Interactive Demo</h2>
 
-<h2>Interactive Demo</h2>
+    <p>
+        Welcome aboard Commander! Explore the mysterious Aurora Space Station, discover hidden rooms, collect items and uncover secrets.
+    </p>
 
-<p>
-Welcome aboard Commander!
-Explore the mysterious Aurora Space Station,
-discover hidden rooms, collect items and uncover secrets.
-</p>
+    <div class="features-grid">
+        <div class="feature-item"><span>🚀</span> Smooth Camera</div>
+        <div class="feature-item"><span>🚪</span> Sliding Doors</div>
+        <div class="feature-item"><span>🗺️</span> Live Minimap</div>
+        <div class="feature-item"><span>📦</span> Interactive Crates</div>
+        <div class="feature-item"><span>🎒</span> Inventory System</div>
+        <div class="feature-item"><span>🔍</span> Hidden Secrets</div>
+    </div>
 
-<div class="features">
-✅ Smooth Camera<br>
-✅ Sliding Doors<br>
-✅ Live Minimap<br>
-✅ Interactive Crates<br>
-✅ Inventory System<br>
-✅ Hidden Secrets
-</div>
+    <a href="game/index.html" class="play-btn" onclick="startGame(event)">
+        🚀 PLAY DEMO
+    </a>
 
-<br>
-
-<a href="game/index.html" class="play-btn">
-    🚀 PLAY DEMO
-</a>
-
-<div class="small">
-Petri-Chor Universe Demo • Version 0.1
-</div>
+    <div class="small">
+        Petri-Chor Universe Demo • Version 0.1
+    </div>
 
 </div>
 
 <script>
-function startGame(){
-window.location.href="index.html";
+// Kept the functional script interface layer intact
+function startGame(e){
+    // If you need standard redirection via button triggers rather than straight anchor hits:
+    // e.preventDefault();
+    // window.location.href = "game/index.html";
+    console.log("Launching Aurora Protocol...");
 }
 </script>
 
