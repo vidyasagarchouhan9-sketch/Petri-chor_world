@@ -1,7 +1,5 @@
 // ================================================================
-//  AURORA SPACE STATION – FULL GAME (self-contained)
-//  Save as game.js and include in any HTML page.
-//  It creates all DOM elements and runs the game.
+//  AURORA SPACE STATION 
 // ================================================================
 
 (function() {
@@ -124,341 +122,29 @@
         return null;
     }
 
-    // ─── Build DOM ──────────────────────────────────────────────
-    // Main containers
-    const game = document.createElement("div");
-    game.id = "game";
-    game.style.position = "relative";
-    game.style.width = "100vw";
-    game.style.height = "100vh";
-    game.style.background = "#0f1420";
-    game.style.overflow = "hidden";
-    document.body.appendChild(game);
-    document.body.style.margin = "0";
-    document.body.style.padding = "0";
-    document.body.style.background = "#0b0f1a";
-    document.body.style.overflow = "hidden";
+    // ─── Get references to existing DOM elements ────────────────
+    const game = document.getElementById("game");
+    const world = document.getElementById("world");
+    const mapContainer = document.getElementById("map");
+    const player = document.getElementById("player");
+    const roomBanner = document.getElementById("room-banner");
+    const minimapCanvas = document.getElementById("minimapCanvas");
+    const actionContainer = document.getElementById("action-container");
+    const btnAction = document.getElementById("btn-action");
+    const bagBtn = document.getElementById("bagBtn");
+    const bagBadge = document.getElementById("bagBadge");
+    const bagWindow = document.getElementById("bagWindow");
+    const bagGrid = document.getElementById("bagGrid");
+    const closeBagBtn = document.getElementById("closeBag");
+    const joystickContainer = document.getElementById("joystick-container");
+    const joystickBase = document.getElementById("joystick-base");
+    const joystickThumb = document.getElementById("joystick-thumb");
+    const missionOverlay = document.getElementById("missionOverlay");
+    const missionPopupContent = document.getElementById("missionPopupContent");
+    const missionContinueBtn = document.getElementById("missionContinueBtn");
+    const missionToast = document.getElementById("missionToast");
 
-    const world = document.createElement("div");
-    world.id = "world";
-    world.style.position = "absolute";
-    world.style.top = "0";
-    world.style.left = "0";
-    world.style.willChange = "transform";
-    game.appendChild(world);
-
-    const mapContainer = document.createElement("div");
-    mapContainer.id = "map";
-    mapContainer.style.display = "grid";
-    mapContainer.style.gridTemplateColumns = `repeat(${COLS}, ${TILE_SIZE}px)`;
-    mapContainer.style.gridTemplateRows = `repeat(${ROWS}, ${TILE_SIZE}px)`;
-    mapContainer.style.width = `${COLS * TILE_SIZE}px`;
-    mapContainer.style.height = `${ROWS * TILE_SIZE}px`;
-    mapContainer.style.background = "#1a1f2e";
-    world.appendChild(mapContainer);
-
-    const player = document.createElement("div");
-    player.id = "player";
-    player.style.position = "absolute";
-    player.style.width = "50px";
-    player.style.height = "50px";
-    player.style.background = "radial-gradient(circle at 35% 35%, #6af, #1a5aaa)";
-    player.style.borderRadius = "50%";
-    player.style.border = "3px solid #8af";
-    player.style.boxShadow = "0 0 30px rgba(100,170,255,0.4), inset 0 -4px 10px rgba(0,0,0,0.3)";
-    player.style.zIndex = "10";
-    player.style.pointerEvents = "none";
-    player.style.transition = "transform 0.08s";
-    world.appendChild(player);
-
-    // Room banner
-    const roomBanner = document.createElement("div");
-    roomBanner.id = "room-banner";
-    roomBanner.style.position = "fixed";
-    roomBanner.style.top = "50%";
-    roomBanner.style.left = "50%";
-    roomBanner.style.transform = "translate(-50%, -50%) scale(0.85)";
-    roomBanner.style.background = "rgba(10,16,30,0.92)";
-    roomBanner.style.backdropFilter = "blur(16px)";
-    roomBanner.style.padding = "16px 42px";
-    roomBanner.style.borderRadius = "18px";
-    roomBanner.style.border = "1px solid rgba(100,200,255,0.25)";
-    roomBanner.style.boxShadow = "0 0 80px rgba(0,50,100,0.4)";
-    roomBanner.style.color = "#b0e4ff";
-    roomBanner.style.fontSize = "28px";
-    roomBanner.style.fontWeight = "600";
-    roomBanner.style.letterSpacing = "2px";
-    roomBanner.style.textShadow = "0 0 30px rgba(100,200,255,0.3)";
-    roomBanner.style.opacity = "0";
-    roomBanner.style.pointerEvents = "none";
-    roomBanner.style.transition = "opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)";
-    roomBanner.style.zIndex = "100";
-    roomBanner.style.whiteSpace = "nowrap";
-    game.appendChild(roomBanner);
-
-    // Minimap
-    const minimapWrap = document.createElement("div");
-    minimapWrap.id = "minimap-wrap";
-    minimapWrap.style.position = "fixed";
-    minimapWrap.style.bottom = "20px";
-    minimapWrap.style.right = "20px";
-    minimapWrap.style.width = "130px";
-    minimapWrap.style.height = "130px";
-    minimapWrap.style.background = "rgba(8,12,24,0.85)";
-    minimapWrap.style.backdropFilter = "blur(8px)";
-    minimapWrap.style.borderRadius = "16px";
-    minimapWrap.style.border = "1px solid rgba(100,200,255,0.15)";
-    minimapWrap.style.boxShadow = "0 4px 40px rgba(0,0,0,0.6)";
-    minimapWrap.style.zIndex = "50";
-    minimapWrap.style.padding = "5px";
-    minimapWrap.style.pointerEvents = "none";
-    const minimapCanvas = document.createElement("canvas");
-    minimapCanvas.id = "minimapCanvas";
-    minimapCanvas.width = 120;
-    minimapCanvas.height = 120;
-    minimapCanvas.style.width = "100%";
-    minimapCanvas.style.height = "100%";
-    minimapCanvas.style.borderRadius = "10px";
-    minimapWrap.appendChild(minimapCanvas);
-    game.appendChild(minimapWrap);
-
-    // Action button
-    const actionContainer = document.createElement("div");
-    actionContainer.id = "action-container";
-    actionContainer.style.position = "fixed";
-    actionContainer.style.bottom = "110px";
-    actionContainer.style.left = "50%";
-    actionContainer.style.transform = "translateX(-50%)";
-    actionContainer.style.zIndex = "60";
-    actionContainer.style.pointerEvents = "none";
-    actionContainer.classList.add("hidden");
-    const btnAction = document.createElement("button");
-    btnAction.id = "btn-action";
-    btnAction.style.pointerEvents = "auto";
-    btnAction.style.background = "rgba(10,20,40,0.85)";
-    btnAction.style.backdropFilter = "blur(12px)";
-    btnAction.style.border = "1px solid rgba(100,200,255,0.3)";
-    btnAction.style.borderRadius = "60px";
-    btnAction.style.padding = "14px 32px";
-    btnAction.style.color = "#b0e4ff";
-    btnAction.style.fontSize = "18px";
-    btnAction.style.fontWeight = "600";
-    btnAction.style.letterSpacing = "1px";
-    btnAction.style.boxShadow = "0 4px 30px rgba(0,50,100,0.3)";
-    btnAction.style.cursor = "pointer";
-    btnAction.textContent = "🖐️ INTERACT";
-    actionContainer.appendChild(btnAction);
-    game.appendChild(actionContainer);
-
-    // Backpack button
-    const bagBtn = document.createElement("button");
-    bagBtn.id = "bagBtn";
-    bagBtn.style.position = "fixed";
-    bagBtn.style.bottom = "30px";
-    bagBtn.style.left = "30px";
-    bagBtn.style.zIndex = "60";
-    bagBtn.style.background = "rgba(10,20,40,0.85)";
-    bagBtn.style.backdropFilter = "blur(12px)";
-    bagBtn.style.border = "1px solid rgba(100,200,255,0.2)";
-    bagBtn.style.borderRadius = "60px";
-    bagBtn.style.padding = "14px 22px";
-    bagBtn.style.color = "#b0e4ff";
-    bagBtn.style.fontSize = "20px";
-    bagBtn.style.fontWeight = "600";
-    bagBtn.style.boxShadow = "0 4px 30px rgba(0,0,0,0.4)";
-    bagBtn.style.cursor = "pointer";
-    bagBtn.style.display = "flex";
-    bagBtn.style.alignItems = "center";
-    bagBtn.style.gap = "10px";
-    const bagBadge = document.createElement("span");
-    bagBadge.id = "bagBadge";
-    bagBadge.style.background = "#4a9aff";
-    bagBadge.style.color = "#fff";
-    bagBadge.style.borderRadius = "30px";
-    bagBadge.style.padding = "0 10px";
-    bagBadge.style.fontSize = "14px";
-    bagBadge.style.fontWeight = "700";
-    bagBadge.style.minWidth = "22px";
-    bagBadge.style.textAlign = "center";
-    bagBadge.textContent = "0";
-    bagBtn.appendChild(document.createTextNode("🎒 "));
-    bagBtn.appendChild(bagBadge);
-    game.appendChild(bagBtn);
-
-    // Backpack window
-    const bagWindow = document.createElement("div");
-    bagWindow.id = "bagWindow";
-    bagWindow.style.display = "none";
-    bagWindow.style.position = "fixed";
-    bagWindow.style.top = "50%";
-    bagWindow.style.left = "50%";
-    bagWindow.style.transform = "translate(-50%, -50%)";
-    bagWindow.style.width = "90vw";
-    bagWindow.style.maxWidth = "560px";
-    bagWindow.style.maxHeight = "70vh";
-    bagWindow.style.background = "rgba(8,14,28,0.96)";
-    bagWindow.style.backdropFilter = "blur(24px)";
-    bagWindow.style.borderRadius = "28px";
-    bagWindow.style.border = "1px solid rgba(100,200,255,0.15)";
-    bagWindow.style.boxShadow = "0 20px 80px rgba(0,0,0,0.8)";
-    bagWindow.style.zIndex = "200";
-    bagWindow.style.padding = "24px 20px 28px";
-    bagWindow.style.overflowY = "auto";
-    const title = document.createElement("h2");
-    title.style.color = "#b0e4ff";
-    title.style.fontSize = "22px";
-    title.style.fontWeight = "600";
-    title.style.textAlign = "center";
-    title.style.marginBottom = "16px";
-    title.style.letterSpacing = "2px";
-    title.textContent = "🎒 INVENTORY";
-    bagWindow.appendChild(title);
-    const bagGrid = document.createElement("div");
-    bagGrid.id = "bagGrid";
-    bagGrid.style.display = "grid";
-    bagGrid.style.gridTemplateColumns = "repeat(9, 1fr)";
-    bagGrid.style.gap = "8px";
-    bagGrid.style.marginBottom = "18px";
-    bagWindow.appendChild(bagGrid);
-    const closeBagBtn = document.createElement("button");
-    closeBagBtn.id = "closeBag";
-    closeBagBtn.style.display = "block";
-    closeBagBtn.style.width = "100%";
-    closeBagBtn.style.padding = "14px";
-    closeBagBtn.style.background = "rgba(30,60,100,0.4)";
-    closeBagBtn.style.border = "1px solid rgba(100,200,255,0.15)";
-    closeBagBtn.style.borderRadius = "16px";
-    closeBagBtn.style.color = "#b0e4ff";
-    closeBagBtn.style.fontSize = "18px";
-    closeBagBtn.style.fontWeight = "600";
-    closeBagBtn.style.cursor = "pointer";
-    closeBagBtn.textContent = "CLOSE";
-    bagWindow.appendChild(closeBagBtn);
-    game.appendChild(bagWindow);
-
-    // Joystick
-    const joystickContainer = document.createElement("div");
-    joystickContainer.id = "joystick-container";
-    joystickContainer.style.position = "fixed";
-    joystickContainer.style.bottom = "30px";
-    joystickContainer.style.left = "50%";
-    joystickContainer.style.transform = "translateX(-50%)";
-    joystickContainer.style.zIndex = "40";
-    joystickContainer.style.display = "none";
-    joystickContainer.style.touchAction = "none";
-    const joystickBase = document.createElement("div");
-    joystickBase.id = "joystick-base";
-    joystickBase.style.width = "130px";
-    joystickBase.style.height = "130px";
-    joystickBase.style.borderRadius = "50%";
-    joystickBase.style.background = "rgba(10,20,40,0.6)";
-    joystickBase.style.backdropFilter = "blur(8px)";
-    joystickBase.style.border = "2px solid rgba(100,200,255,0.12)";
-    joystickBase.style.boxShadow = "0 0 50px rgba(0,0,0,0.4)";
-    joystickBase.style.position = "relative";
-    joystickBase.style.display = "flex";
-    joystickBase.style.alignItems = "center";
-    joystickBase.style.justifyContent = "center";
-    const joystickThumb = document.createElement("div");
-    joystickThumb.id = "joystick-thumb";
-    joystickThumb.style.width = "56px";
-    joystickThumb.style.height = "56px";
-    joystickThumb.style.borderRadius = "50%";
-    joystickThumb.style.background = "radial-gradient(circle at 40% 40%, #6af, #1a5aaa)";
-    joystickThumb.style.border = "2px solid rgba(100,200,255,0.4)";
-    joystickThumb.style.boxShadow = "0 0 30px rgba(100,170,255,0.2)";
-    joystickThumb.style.position = "absolute";
-    joystickThumb.style.top = "50%";
-    joystickThumb.style.left = "50%";
-    joystickThumb.style.transform = "translate(-50%, -50%)";
-    joystickThumb.style.pointerEvents = "none";
-    joystickBase.appendChild(joystickThumb);
-    joystickContainer.appendChild(joystickBase);
-    game.appendChild(joystickContainer);
-
-    // Mission overlay
-    const missionOverlay = document.createElement("div");
-    missionOverlay.id = "missionOverlay";
-    missionOverlay.style.position = "fixed";
-    missionOverlay.style.inset = "0";
-    missionOverlay.style.zIndex = "300";
-    missionOverlay.style.display = "flex";
-    missionOverlay.style.alignItems = "center";
-    missionOverlay.style.justifyContent = "center";
-    missionOverlay.style.background = "rgba(0,0,0,0.7)";
-    missionOverlay.style.backdropFilter = "blur(6px)";
-    missionOverlay.style.transition = "opacity 0.4s, visibility 0.4s";
-    missionOverlay.style.opacity = "0";
-    missionOverlay.style.visibility = "hidden";
-    missionOverlay.style.padding = "20px";
-    missionOverlay.classList.add("mission-hidden");
-    const missionPopup = document.createElement("div");
-    missionPopup.id = "missionPopup";
-    missionPopup.style.background = "rgba(8,14,28,0.96)";
-    missionPopup.style.backdropFilter = "blur(24px)";
-    missionPopup.style.borderRadius = "32px";
-    missionPopup.style.border = "1px solid rgba(100,200,255,0.12)";
-    missionPopup.style.boxShadow = "0 30px 100px rgba(0,0,0,0.8)";
-    missionPopup.style.maxWidth = "520px";
-    missionPopup.style.width = "100%";
-    missionPopup.style.padding = "36px 32px 32px";
-    missionPopup.style.textAlign = "center";
-    missionPopup.style.maxHeight = "80vh";
-    missionPopup.style.overflowY = "auto";
-    const missionPopupContent = document.createElement("div");
-    missionPopupContent.id = "missionPopupContent";
-    missionPopupContent.style.color = "#b8d8f0";
-    missionPopupContent.style.fontSize = "18px";
-    missionPopupContent.style.lineHeight = "1.7";
-    missionPopupContent.style.letterSpacing = "0.3px";
-    missionPopupContent.style.minHeight = "60px";
-    const missionContinueBtn = document.createElement("button");
-    missionContinueBtn.id = "missionContinueBtn";
-    missionContinueBtn.style.marginTop = "24px";
-    missionContinueBtn.style.padding = "14px 40px";
-    missionContinueBtn.style.background = "rgba(30,70,130,0.5)";
-    missionContinueBtn.style.border = "1px solid rgba(100,200,255,0.2)";
-    missionContinueBtn.style.borderRadius = "60px";
-    missionContinueBtn.style.color = "#b0e4ff";
-    missionContinueBtn.style.fontSize = "16px";
-    missionContinueBtn.style.fontWeight = "600";
-    missionContinueBtn.style.letterSpacing = "2px";
-    missionContinueBtn.style.cursor = "pointer";
-    missionContinueBtn.style.width = "100%";
-    missionContinueBtn.classList.add("mission-hidden");
-    missionContinueBtn.textContent = "CONTINUE";
-    missionPopup.appendChild(missionPopupContent);
-    missionPopup.appendChild(missionContinueBtn);
-    missionOverlay.appendChild(missionPopup);
-    game.appendChild(missionOverlay);
-
-    // Toast
-    const missionToast = document.createElement("div");
-    missionToast.id = "missionToast";
-    missionToast.style.position = "fixed";
-    missionToast.style.bottom = "180px";
-    missionToast.style.left = "50%";
-    missionToast.style.transform = "translateX(-50%) translateY(20px)";
-    missionToast.style.zIndex = "80";
-    missionToast.style.background = "rgba(8,14,28,0.92)";
-    missionToast.style.backdropFilter = "blur(14px)";
-    missionToast.style.borderRadius = "18px";
-    missionToast.style.border = "1px solid rgba(100,200,255,0.12)";
-    missionToast.style.padding = "16px 32px";
-    missionToast.style.color = "#b0e4ff";
-    missionToast.style.fontSize = "17px";
-    missionToast.style.fontWeight = "500";
-    missionToast.style.textAlign = "center";
-    missionToast.style.lineHeight = "1.5";
-    missionToast.style.boxShadow = "0 10px 60px rgba(0,0,0,0.6)";
-    missionToast.style.opacity = "0";
-    missionToast.style.pointerEvents = "none";
-    missionToast.style.transition = "opacity 0.4s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
-    missionToast.style.maxWidth = "90vw";
-    missionToast.style.whiteSpace = "pre-line";
-    game.appendChild(missionToast);
-
-     // ─── Render tiles ────────────────────────────────────────────
+    // ─── Render tiles ────────────────────────────────────────────
     const doorElements = {};
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
@@ -578,7 +264,7 @@
         }
     }
 
- // ─── Game state ──────────────────────────────────────────────
+    // ─── Game state ──────────────────────────────────────────────
     let playerX = 0, playerY = 0;
     let camX = 0, camY = 0;
     const MOVE_SPEED = 220;
@@ -591,12 +277,10 @@
 
     function showRoomBanner(name) {
         roomBanner.textContent = name;
-        roomBanner.style.opacity = "1";
-        roomBanner.style.transform = "translate(-50%, -50%) scale(1)";
+        roomBanner.classList.add("show");
         clearTimeout(bannerHideTimer);
         bannerHideTimer = setTimeout(() => {
-            roomBanner.style.opacity = "0";
-            roomBanner.style.transform = "translate(-50%, -50%) scale(0.85)";
+            roomBanner.classList.remove("show");
         }, 2800);
     }
 
@@ -666,7 +350,7 @@
     }
     updateMiniMap();
 
- // ─── Collision & doors ──────────────────────────────────────
+    // ─── Collision & doors ──────────────────────────────────────
     function checkWalkable(x, y) {
         const padding = 12;
         const points = [
@@ -712,7 +396,8 @@
             }
         }
     }
-   // ─── Inventory ───────────────────────────────────────────────
+
+    // ─── Inventory ───────────────────────────────────────────────
     const itemDropPool = [
         "🔋 High-Capacity Plasma Battery",
         "🧪 Glowing Alien Bio-Sample",
@@ -842,19 +527,15 @@
         missionToast.innerHTML = message.replace(/\n/g, "<br>");
         missionToast.className = variantClass || "";
         void missionToast.offsetWidth;
-        missionToast.style.opacity = "1";
-        missionToast.style.transform = "translateX(-50%) translateY(0)";
+        missionToast.classList.add("show");
         clearTimeout(toastHideTimer);
         toastHideTimer = setTimeout(() => {
-            missionToast.style.opacity = "0";
-            missionToast.style.transform = "translateX(-50%) translateY(20px)";
+            missionToast.classList.remove("show");
         }, duration);
     }
 
     function openMissionPopup(html, { showContinue = false, continueLabel = "CONTINUE", onContinue = null } = {}) {
         missionPopupContent.innerHTML = html;
-        missionOverlay.style.opacity = "1";
-        missionOverlay.style.visibility = "visible";
         missionOverlay.classList.remove("mission-hidden");
         if (showContinue) {
             missionContinueBtn.textContent = continueLabel;
@@ -870,8 +551,6 @@
     }
 
     function closeMissionPopup() {
-        missionOverlay.style.opacity = "0";
-        missionOverlay.style.visibility = "hidden";
         missionOverlay.classList.add("mission-hidden");
         missionPopupContent.innerHTML = "";
         missionContinueBtn.classList.add("mission-hidden");
@@ -1106,7 +785,7 @@
         }
     }
 
- // ─── Interaction button ─────────────────────────────────────
+// ─── Interaction button ─────────────────────────────────────
     btnAction.addEventListener("click", () => {
         if (missionInteractTarget === "serverRack") {
             handleServerRackInteract();
