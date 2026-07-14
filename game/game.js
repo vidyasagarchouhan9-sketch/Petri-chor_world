@@ -404,19 +404,16 @@ if (btnAction) {
         playerInventory.push(itemName);
         updateInventoryHUD();
 
-                // Re-check loops immediately to hide button since item was taken
+        // Re-check loops immediately to hide button since item was taken
         checkNearbyItems();
         updateMiniMap(); // Keep map visuals updated if objects are cleared
     });
 }
 
 function updateInventoryHUD() {
-  
-
     bagGrid.innerHTML = "";
 
     for(let i = 0; i < 27; i++){
-
         const slot = document.createElement("div");
         slot.className = "slot";
 
@@ -427,10 +424,7 @@ function updateInventoryHUD() {
 
         bagGrid.appendChild(slot);
     }
-
 }
-  
-
 
 // Wire up the backpack button to open/close the inventory window
 if (bagBtn && bagWindow) {
@@ -451,9 +445,11 @@ if (closeBagBtn && bagWindow) {
 const joystickContainer = document.getElementById('joystick-container');
 const joystickBase = document.getElementById('joystick-base');
 const joystickThumb = document.getElementById('joystick-thumb');
-// Detect touch devices
+
+// Detect touch devices once at the top/middle cleanly
 const isTouchDevice =
     window.matchMedia("(pointer: coarse)").matches ||
+    "ontouchstart" in window ||
     navigator.maxTouchPoints > 0;
 
 let joystickActive = false;
@@ -545,17 +541,10 @@ function handleJoystickEnd() {
 }
 
 if (isTouchDevice) {
-
     // Touch controls
     joystickContainer.addEventListener('touchstart', handleJoystickStart, { passive: false });
     window.addEventListener('touchmove', handleJoystickMove, { passive: false });
     window.addEventListener('touchend', handleJoystickEnd);
-
-} else {
-
-    // Optional mouse testing
-    joystickContainer.style.display = "none";
-
 }
 
 // Keyboard listeners
@@ -574,17 +563,6 @@ window.addEventListener("keyup", (e) => {
     if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") activeKeys.delete("right");
     evaluateKeyboardVector();
 });
-
-// ======================================
-// SHOW JOYSTICK ONLY ON TOUCH DEVICES
-// ======================================
-
-if (isTouchDevice) {
-    joystickContainer.style.display = "flex";
-} else {
-    joystickContainer.style.display = "none";
-}
-
 
 // ============================================================================
 // MAIN GAME LOOP
@@ -613,7 +591,7 @@ function gameLoop(currentTime) {
         
         updateDoors();
         checkRoomEntry();
-      checkNearbyItems();
+        checkNearbyItems();
         updateMiniMap(); // Optimized: Only redraw mini-map grid when coordinates change!
     } 
 
@@ -638,20 +616,12 @@ window.addEventListener("resize", () => {
 });
 
 // ===============================
-// DEVICE DETECTION
+// DEVICE DETECTION VISUAL CONFIG
 // ===============================
-
-const isTouchDevice =
-    window.matchMedia("(pointer: coarse)").matches ||
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0;
-
-const joystick = document.getElementById("joystick-container");
-
-if (joystick) {
+if (joystickContainer) {
     if (isTouchDevice) {
-        joystick.style.display = "block";
+        joystickContainer.style.display = "flex";
     } else {
-        joystick.style.display = "none";
+        joystickContainer.style.display = "none";
     }
 }
