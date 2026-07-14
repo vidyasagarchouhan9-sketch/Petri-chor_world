@@ -451,6 +451,10 @@ if (closeBagBtn && bagWindow) {
 const joystickContainer = document.getElementById('joystick-container');
 const joystickBase = document.getElementById('joystick-base');
 const joystickThumb = document.getElementById('joystick-thumb');
+// Detect touch devices
+const isTouchDevice =
+    window.matchMedia("(pointer: coarse)").matches ||
+    navigator.maxTouchPoints > 0;
 
 let joystickActive = false;
 let joystickStartX = 0;
@@ -540,15 +544,19 @@ function handleJoystickEnd() {
     evaluateKeyboardVector(); // Return control to keyboard checks if any keys were held
 }
 
-// Touch listeners
-joystickContainer.addEventListener('touchstart', handleJoystickStart, { passive: false });
-window.addEventListener('touchmove', handleJoystickMove, { passive: false });
-window.addEventListener('touchend', handleJoystickEnd);
+if (isTouchDevice) {
 
-// Mouse listeners for browser testing
-joystickContainer.addEventListener('mousedown', handleJoystickStart);
-window.addEventListener('mousemove', handleJoystickMove);
-window.addEventListener('mouseup', handleJoystickEnd);
+    // Touch controls
+    joystickContainer.addEventListener('touchstart', handleJoystickStart, { passive: false });
+    window.addEventListener('touchmove', handleJoystickMove, { passive: false });
+    window.addEventListener('touchend', handleJoystickEnd);
+
+} else {
+
+    // Optional mouse testing
+    joystickContainer.style.display = "none";
+
+}
 
 // Keyboard listeners
 window.addEventListener("keydown", (e) => {
@@ -566,6 +574,17 @@ window.addEventListener("keyup", (e) => {
     if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") activeKeys.delete("right");
     evaluateKeyboardVector();
 });
+
+// ======================================
+// SHOW JOYSTICK ONLY ON TOUCH DEVICES
+// ======================================
+
+if (isTouchDevice) {
+    joystickContainer.style.display = "flex";
+} else {
+    joystickContainer.style.display = "none";
+}
+
 
 // ============================================================================
 // MAIN GAME LOOP
@@ -617,3 +636,22 @@ window.addEventListener("resize", () => {
     camX = game.clientWidth / 2 - playerX - 30;
     camY = game.clientHeight / 2 - playerY - 30;
 });
+
+// ===============================
+// DEVICE DETECTION
+// ===============================
+
+const isTouchDevice =
+    window.matchMedia("(pointer: coarse)").matches ||
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0;
+
+const joystick = document.getElementById("joystick-container");
+
+if (joystick) {
+    if (isTouchDevice) {
+        joystick.style.display = "block";
+    } else {
+        joystick.style.display = "none";
+    }
+}
