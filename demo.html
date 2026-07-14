@@ -142,11 +142,22 @@
             background: rgba(0, 242, 254, 0.02);
         }
 
+        /* Action Buttons Container */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
         .play-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            width: 100%;
             padding: 16px 45px;
             font-family: 'Orbitron', sans-serif;
             font-size: 1.3rem;
@@ -168,6 +179,34 @@
             filter: brightness(1.1);
         }
 
+        .inst-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 45px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-decoration: none;
+            border: 2px solid rgba(0, 242, 254, 0.4);
+            border-radius: 12px;
+            cursor: pointer;
+            background: transparent;
+            color: var(--cyan-glow);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            letter-spacing: 1px;
+        }
+
+        .inst-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            background: rgba(0, 242, 254, 0.08);
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
+        }
+
         .small {
             margin-top: 35px;
             font-family: 'Orbitron', sans-serif;
@@ -186,9 +225,6 @@
             }
             .features-grid {
                 grid-template-columns: 1fr;
-            }
-            .play-btn {
-                width: 100%;
             }
         }
     </style>
@@ -213,9 +249,14 @@
         <div class="feature-item"><span>🔍</span> Hidden Secrets</div>
     </div>
 
-    <a href="game/index.html" class="play-btn" onclick="startGame(event)">
-        🚀 PLAY DEMO
-    </a>
+    <div class="btn-container">
+        <a href="game/index.html" class="play-btn" onclick="startGame(event)">
+            🚀 PLAY DEMO
+        </a>
+        <a href="inst.html" class="inst-btn">
+            📋 INSTRUCTIONS
+        </a>
+    </div>
 
     <div class="small">
         Petri-Chor Universe Demo • Version 0.1
