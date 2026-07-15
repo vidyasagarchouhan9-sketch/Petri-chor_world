@@ -605,51 +605,54 @@ function triggerEmergencyWarning(){
    RENDER
    --------------------------------------------------------------- */
 const COLORS = {
-  floor: '#12161f',
-  floorCorridor: '#0c0f16',
-  wall: '#2a3242',
+  floor: '#7a828a',       // Medium metallic grey
+  floorCorridor: '#6b727a', // Opaque metallic grey for corridors
+  wall: '#3a414a',        // Dark steel grey
   wallGlow: '#3ff0e0',
-  reactor: '#ff5a3c',
-  ai: '#b26bff',
+  reactor: '#6a4cff',     // Purple/blue energy glow
+  ai: '#00f0ff',          // Cyan futuristic
   locked: '#ff3b5c',
   unlocked: '#3ff0e0',
+  medical: '#e0e8f0',
+  workshop: '#ff9500',
+  bio: '#4cff8a'
 };
 
-function worldToScreen(x,y){
-  return { x: x - state.camera.x + canvas.width/2, y: y - state.camera.y + canvas.height/2 };
-}
-
 function render(){
+  // Deep space background (now ONLY visible through window panels)
   ctx.fillStyle = '#05060a';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  // starfield parallax background
-  drawStars();
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // NOTE: Global drawStars() removed so stars don't bleed through walls/floors
 
   ctx.save();
   ctx.translate(canvas.width/2 - state.camera.x, canvas.height/2 - state.camera.y);
 
-  // corridors
+  // Corridors: Completely opaque with subtle metallic grid
   for (const door of DOORS){
     if (door.secret && !doorVisible(door)) continue;
     const c = door.corridor;
     ctx.fillStyle = COLORS.floorCorridor;
     ctx.fillRect(c.x, c.y, c.w, c.h);
+    
+    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+    ctx.lineWidth = 1;
+    for (let gx = c.x; gx <= c.x + c.w; gx += 40) { ctx.beginPath(); ctx.moveTo(gx, c.y); ctx.lineTo(gx, c.y + c.h); ctx.stroke(); }
+    for (let gy = c.y; gy <= c.y + c.h; gy += 40) { ctx.beginPath(); ctx.moveTo(c.x, gy); ctx.lineTo(c.x + c.w, gy); ctx.stroke(); }
   }
 
-  // rooms
+  // Rooms
   for (const r of ROOM_LIST){
     if (r.secret && !state.visitedRooms.has(r.id) && !state.flags.vaultUnlocked) continue;
     drawRoom(r);
   }
 
-  // doors (drawn after rooms so they sit on top of walls)
+  // Doors
   for (const door of DOORS){
     if (door.secret && !doorVisible(door)) continue;
     drawDoor(door);
   }
 
-  // interactive objects
+  // Interactive objects
   for (const obj of INTERACTIVES){
     const room = ROOMS[obj.room];
     if (room.secret && !doorVisibleForRoom(room)) continue;
@@ -658,7 +661,6 @@ function render(){
 
   drawDust();
   drawPlayer();
-
   ctx.restore();
 
   drawMinimap();
@@ -671,109 +673,262 @@ function doorVisibleForRoom(room){
 }
 
 function drawRoom(r){
-  const pulse = 0.5 + 0.5*Math.sin(state.time*2);
+  const pulse = 0.85 + 0.15 * Math.sin(state.time * 0.5); // Very slow, soft pulse (reduced blinking)
+  
+  // 1. Medium metallic grey floor
   ctx.fillStyle = COLORS.floor;
   ctx.fillRect(r.x, r.y, r.w, r.h);
 
-  // subtle floor grid
-  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  // 2. Metallic floor tiles with light wear
+  ctx.strokeStyle = 'rgba(0,0,0,0.15)';
   ctx.lineWidth = 1;
-  for (let gx = r.x; gx <= r.x+r.w; gx += 40){ ctx.beginPath(); ctx.moveTo(gx,r.y); ctx.lineTo(gx,r.y+r.h); ctx.stroke(); }
-  for (let gy = r.y; gy <= r.y+r.h; gy += 40){ ctx.beginPath(); ctx.moveTo(r.x,gy); ctx.lineTo(r.x+r.w,gy); ctx.stroke(); }
+  const tileSize = 40;
+  for (let gx = r.x; gx <= r.x + r.w; gx += tileSize) { ctx.beginPath(); ctx.moveTo(gx, r.y); ctx.lineTo(gx, r.y + r.h); ctx.stroke(); }
+  for (let gy = r.y; gy <= r.y + r.h; gy += tileSize) { ctx.beginPath(); ctx.moveTo(r.x, gy); ctx.lineTo(r.x + r.w, gy); ctx.stroke(); }
+  
+  // Subtle random wear specks
+  ctx.fillStyle = 'rgba(0,0,0,0.05)';
+  const seed = Math.abs(r.x * 7 + r.y * 13);
+  for(let i = 0; i < 15; i++) {
+    const wx = r.x + ((seed + i * 37) % r.w);
+    const wy = r.y + ((seed + i * 53) % r.h);
+    ctx.beginPath(); ctx.arc(wx, wy, 2 + (i % 3), 0, 7); ctx.fill();
+  }
 
-  // themed glow
-  let accent = COLORS.wallGlow;
-  if (r.id === 'POWER_REACTOR') accent = COLORS.reactor;
-  if (r.id === 'AI_CORE') accent = COLORS.ai;
-  if (r.id === 'HIDDEN_VAULT') accent = '#ffd23f';
+  // Subtle reflection on metal floors
+  const grad = ctx.createLinearGradient(r.x, r.y, r.x, r.y + r.h);
+  grad.addColorStop(0, 'rgba(255,255,255,0.06)');
+  grad.addColorStop(0.5, 'rgba(255,255,255,0)');
+  grad.addColorStop(1, 'rgba(0,0,0,0.1)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(r.x, r.y, r.w, r.h);
 
-  ctx.strokeStyle = COLORS.wall;
-  ctx.lineWidth = 10;
+  // 3. Dark steel grey walls with subtle panel lines
+  ctx.fillStyle = '#3a414a';
+  ctx.lineWidth = 12;
+  ctx.strokeStyle = '#2a3038';
   ctx.strokeRect(r.x, r.y, r.w, r.h);
+  
+  ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(r.x, r.y + r.h/2); ctx.lineTo(r.x + r.w, r.y + r.h/2);
+  ctx.moveTo(r.x + r.w/2, r.y); ctx.lineTo(r.x + r.w/2, r.y + r.h);
+  ctx.stroke();
+
+  // 4. Room-specific soft ambient lighting
+  let ambientColor = 'rgba(63, 240, 224, 0.06)'; 
+  let accent = COLORS.wallGlow;
+  
+  if (r.id === 'POWER_REACTOR') { ambientColor = 'rgba(106, 76, 255, 0.12)'; accent = COLORS.reactor; }
+  else if (r.id === 'AI_CORE') { ambientColor = 'rgba(0, 240, 255, 0.10)'; accent = COLORS.ai; }
+  else if (r.id === 'MEDICAL_BAY') { ambientColor = 'rgba(224, 232, 240, 0.08)'; accent = COLORS.medical; }
+  else if (r.id === 'BIO_LAB') { ambientColor = 'rgba(76, 255, 138, 0.08)'; accent = COLORS.bio; }
+  else if (r.id === 'WORKSHOP') { ambientColor = 'rgba(255, 149, 0, 0.08)'; accent = COLORS.workshop; }
+  else if (r.id === 'OBSERVATION_DECK') { ambientColor = 'rgba(100, 150, 255, 0.08)'; accent = '#6496ff'; }
+
+  ctx.fillStyle = ambientColor;
+  ctx.fillRect(r.x, r.y, r.w, r.h);
+
+  // 5. Windows (Space view ONLY visible through these)
+  if (r.id === 'OBSERVATION_DECK' || r.id === 'CAFETERIA' || r.id === 'CENTRAL_HALL') {
+    drawWindows(r);
+  }
+
+  // Inner accent border
   ctx.strokeStyle = accent;
-  ctx.globalAlpha = 0.35 + 0.15*pulse;
-  ctx.lineWidth = 3;
-  ctx.strokeRect(r.x+6, r.y+6, r.w-12, r.h-12);
+  ctx.globalAlpha = 0.35 * pulse;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(r.x + 8, r.y + 8, r.w - 16, r.h - 16);
   ctx.globalAlpha = 1;
 
-  // reactor glow
+  // Room label
+  ctx.font = '600 15px "Rajdhani", sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.textAlign = 'left';
+  ctx.fillText(`${r.icon} ${r.name}`, r.x + 16, r.y + 26);
+
+  // 6. Reduced blinking decorative lights (only in critical rooms, very subtle)
+  if (r.id === 'POWER_REACTOR' || r.id === 'AI_CORE' || r.id === 'COMMS_HUB') {
+    for (let i = 0; i < 4; i++) {
+      const bx = r.x + 20 + ((seed + i * 77) % (r.w - 40));
+      const by = r.y + r.h - 15;
+      const on = Math.sin(state.time * 1.2 + i * 1.5 + seed) > 0.4; 
+      ctx.fillStyle = on ? accent : 'rgba(255,255,255,0.15)';
+      ctx.shadowColor = on ? accent : 'transparent';
+      ctx.shadowBlur = on ? 8 : 0;
+      ctx.beginPath(); ctx.arc(bx, by, 3, 0, 7); ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  // 7. Special Room Visuals
   if (r.id === 'POWER_REACTOR'){
     const cx = r.x + r.w/2, cy = r.y + r.h/2;
-    const grad = ctx.createRadialGradient(cx,cy,10,cx,cy,220);
-    grad.addColorStop(0, `rgba(255,90,60,${0.35+0.15*pulse})`);
-    grad.addColorStop(1, 'rgba(255,90,60,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(r.x-100,r.y-100,r.w+200,r.h+200);
+    ctx.fillStyle = '#2a3038'; // Dark metal base
+    ctx.beginPath(); ctx.arc(cx, cy, 60, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#1a1e24'; ctx.lineWidth = 4; ctx.stroke();
+    const rGrad = ctx.createRadialGradient(cx,cy,10,cx,cy,80);
+    rGrad.addColorStop(0, `rgba(106,76,255,${0.4+0.2*pulse})`);
+    rGrad.addColorStop(0.5, `rgba(63,240,224,${0.2+0.1*pulse})`);
+    rGrad.addColorStop(1, 'rgba(106,76,255,0)');
+    ctx.fillStyle = rGrad;
+    ctx.beginPath(); ctx.arc(cx, cy, 80, 0, 7); ctx.fill();
   }
-  // AI core glow
+  
   if (r.id === 'AI_CORE'){
     const cx = r.x + r.w/2, cy = r.y + r.h/2;
-    const grad = ctx.createRadialGradient(cx,cy,10,cx,cy,200);
-    grad.addColorStop(0, `rgba(178,107,255,${0.3+0.2*pulse})`);
-    grad.addColorStop(1, 'rgba(178,107,255,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(r.x-80,r.y-80,r.w+160,r.h+160);
+    ctx.fillStyle = '#05060a'; // Black core
+    ctx.beginPath(); ctx.arc(cx, cy, 50, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.strokeStyle = `rgba(0,240,255,${0.6+0.4*pulse})`; // Cyan futuristic rings
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx, cy, 35, state.time, state.time + 4); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, 45, -state.time*1.5, -state.time*1.5 + 3); ctx.stroke();
   }
 
-  // room label
-  ctx.font = '600 15px "Rajdhani", sans-serif';
-  ctx.fillStyle = 'rgba(255,255,255,0.55)';
-  ctx.textAlign = 'left';
-  ctx.fillText(`${r.icon} ${r.name}`, r.x+16, r.y+26);
+  if (r.id === 'WORKSHOP') {
+    ctx.fillStyle = 'rgba(255, 149, 0, 0.15)'; // Orange industrial accents
+    ctx.fillRect(r.x + 10, r.y + 10, 20, r.h - 20);
+    ctx.fillRect(r.x + r.w - 30, r.y + 10, 20, r.h - 20);
+  }
 
-  // blinking decorative lights
-  const seed = r.x*7+r.y*13;
-  for (let i=0;i<3;i++){
-    const bx = r.x + 30 + ((seed+i*77)%(r.w-60));
-    const by = r.y + r.h - 20;
-    const on = Math.sin(state.time*3 + i*2 + seed) > 0.2;
-    ctx.fillStyle = on ? accent : 'rgba(255,255,255,0.08)';
-    ctx.beginPath(); ctx.arc(bx,by,4,0,7); ctx.fill();
+  if (r.id === 'BIO_LAB') {
+    ctx.fillStyle = 'rgba(224, 232, 240, 0.1)'; // White panel
+    ctx.fillRect(r.x + 10, r.y + 10, r.w - 20, 20);
+    ctx.strokeStyle = COLORS.bio; ctx.lineWidth = 2; // Green accent
+    ctx.strokeRect(r.x + 10, r.y + 10, r.w - 20, 20);
   }
 }
+
+function drawWindows(r) {
+  const windows = [];
+  if (r.id === 'OBSERVATION_DECK') {
+    windows.push({ x: r.x + r.w - 50, y: r.y + 40, w: 30, h: r.h - 80 });
+  } else if (r.id === 'CAFETERIA') {
+    windows.push({ x: r.x + r.w - 40, y: r.y + 30, w: 20, h: 60 });
+    windows.push({ x: r.x + r.w - 40, y: r.y + r.h - 90, w: 20, h: 60 });
+  } else if (r.id === 'CENTRAL_HALL') {
+    windows.push({ x: r.x + r.w/2 - 50, y: r.y + 10, w: 100, h: 20 });
+  }
+
+  for (const win of windows) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(win.x, win.y, win.w, win.h);
+    ctx.clip();
+    drawSpaceView(win.x, win.y, win.w, win.h);
+    ctx.restore();
+
+    // Metallic window frame
+    ctx.strokeStyle = '#5a626a';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(win.x, win.y, win.w, win.h);
+    
+    // Inner frame highlight
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(win.x + 2, win.y + 2, win.w - 4, win.h - 4);
+    
+    // Window crossbars (mullions)
+    ctx.beginPath();
+    if (win.h > win.w) {
+      ctx.moveTo(win.x + win.w/2, win.y); ctx.lineTo(win.x + win.w/2, win.y + win.h);
+    } else {
+      ctx.moveTo(win.x, win.y + win.h/2); ctx.lineTo(win.x + win.w, win.y + win.h/2);
+    }
+    ctx.strokeStyle = '#4a525a';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
+function drawSpaceView(x, y, w, h) {
+  ctx.fillStyle = '#05060a';
+  ctx.fillRect(x, y, w, h);
+
+  // Nebulae
+  const grad1 = ctx.createRadialGradient(x + w*0.3, y + h*0.4, 5, x + w*0.3, y + h*0.4, w*0.8);
+  grad1.addColorStop(0, 'rgba(106, 76, 255, 0.15)'); grad1.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grad1; ctx.fillRect(x, y, w, h);
+
+  const grad2 = ctx.createRadialGradient(x + w*0.7, y + h*0.7, 5, x + w*0.7, y + h*0.7, w*0.6);
+  grad2.addColorStop(0, 'rgba(255, 100, 150, 0.1)'); grad2.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grad2; ctx.fillRect(x, y, w, h);
+
+  // Distant planet
+  if (w > 25 && h > 50) {
+    ctx.fillStyle = '#1a2a4a';
+    ctx.beginPath(); ctx.arc(x + w*0.7, y + h*0.3, Math.min(w, h)*0.25, 0, 7); ctx.fill();
+    ctx.strokeStyle = 'rgba(100, 150, 255, 0.4)'; ctx.lineWidth = 2; ctx.stroke();
+  }
+
+  // Stars (confined to window)
+  const seed = Math.floor(x * 13 + y * 7);
+  for (let i = 0; i < 20; i++) {
+    const sx = x + ((seed + i * 31) % w);
+    const sy = y + ((seed + i * 47) % h);
+    const size = 0.5 + ((seed + i * 11) % 3) * 0.5;
+    const twinkle = 0.5 + 0.5 * Math.sin(state.time * 2 + i + seed);
+    ctx.fillStyle = `rgba(255, 255, 255, ${0.4 + 0.4 * twinkle})`;
+    ctx.beginPath(); ctx.arc(sx, sy, size, 0, 7); ctx.fill();
+  }
+
+  // Occasional satellite or asteroid
+  const spaceObj = Math.sin(state.time * 0.3 + seed);
+  if (spaceObj > 0.85) { // Satellite
+    const sx = x + (seed % w), sy = y + ((seed * 3) % h);
+    ctx.fillStyle = '#8a929a';
+    ctx.fillRect(sx - 4, sy - 2, 8, 4);
+    ctx.fillRect(sx - 10, sy - 1, 4, 2);
+    ctx.fillRect(sx + 6, sy - 1, 4, 2);
+  } else if (spaceObj < -0.85) { // Asteroid
+    const ax = x + ((seed * 7) % w), ay = y + ((seed * 11) % h);
+    ctx.fillStyle = '#4a4a4a';
+    ctx.beginPath(); ctx.moveTo(ax, ay - 4); ctx.lineTo(ax + 5, ay - 2); ctx.lineTo(ax + 3, ay + 4); ctx.lineTo(ax - 4, ay + 3); ctx.lineTo(ax - 5, ay - 1); ctx.fill();
+  }
+                          }
 
 function drawDoor(door){
   const locked = isDoorLocked(door);
   const c = door.corridor;
   const horizontal = c.w > c.h;
-  const distToPlayer = Math.hypot(state.player.x-door.gate.x, state.player.y-door.gate.y);
-  const openAmt = (!locked && distToPlayer < 150) ? Math.min(1,(150-distToPlayer)/90) : 0;
+  const distToPlayer = Math.hypot(state.player.x - door.gate.x, state.player.y - door.gate.y);
+  const openAmt = (!locked && distToPlayer < 150) ? Math.min(1, (150 - distToPlayer) / 90) : 0;
 
-  const color = locked ? COLORS.locked : COLORS.unlocked;
+  const baseColor = '#4a525a'; // Grey doors
+  const glowColor = locked ? COLORS.locked : COLORS.unlocked;
+  
   ctx.save();
   ctx.translate(door.gate.x, door.gate.y);
-
   const leafLen = (horizontal ? c.h : c.w) / 2 - 6;
   const thickness = 16;
 
-  ctx.fillStyle = '#1a1e29';
-  if (horizontal){
-    ctx.fillRect(-thickness/2, -leafLen-6, thickness, leafLen*2+12);
-  } else {
-    ctx.fillRect(-leafLen-6, -thickness/2, leafLen*2+12, thickness);
-  }
+  ctx.fillStyle = baseColor;
+  if (horizontal) ctx.fillRect(-thickness/2, -leafLen-6, thickness, leafLen*2+12);
+  else ctx.fillRect(-leafLen-6, -thickness/2, leafLen*2+12, thickness);
 
-  ctx.fillStyle = color;
-  ctx.shadowColor = color;
-  ctx.shadowBlur = 12;
+  ctx.strokeStyle = glowColor;
+  ctx.lineWidth = 2;
+  ctx.shadowColor = glowColor;
+  ctx.shadowBlur = 10;
   if (horizontal){
     const gap = openAmt * leafLen;
-    ctx.fillRect(-thickness/2, -leafLen, thickness, leafLen-gap);
-    ctx.fillRect(-thickness/2, gap, thickness, leafLen-gap);
+    ctx.strokeRect(-thickness/2, -leafLen, thickness, leafLen - gap);
+    ctx.strokeRect(-thickness/2, gap, thickness, leafLen - gap);
   } else {
     const gap = openAmt * leafLen;
-    ctx.fillRect(-leafLen, -thickness/2, leafLen-gap, thickness);
-    ctx.fillRect(gap, -thickness/2, leafLen-gap, thickness);
+    ctx.strokeRect(-leafLen, -thickness/2, leafLen - gap, thickness);
+    ctx.strokeRect(gap, -thickness/2, leafLen - gap, thickness);
   }
   ctx.shadowBlur = 0;
 
-  // scanner sweep for locked doors
   if (locked){
-    const sweep = (Math.sin(state.time*3) + 1) / 2;
-    ctx.globalAlpha = 0.6;
-    ctx.fillStyle = '#ff3b5c';
-    if (horizontal) ctx.fillRect(-thickness/2, -leafLen + sweep*leafLen*2 - 4, thickness, 8);
-    else ctx.fillRect(-leafLen + sweep*leafLen*2 - 4, -thickness/2, 8, thickness);
+    const sweep = (Math.sin(state.time * 1.5) + 1) / 2; // Slower scanner
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = COLORS.locked;
+    if (horizontal) ctx.fillRect(-thickness/2, -leafLen + sweep * leafLen * 2 - 3, thickness, 6);
+    else ctx.fillRect(-leafLen + sweep * leafLen * 2 - 3, -thickness/2, 6, thickness);
     ctx.globalAlpha = 1;
   }
   ctx.restore();
@@ -787,18 +942,57 @@ function drawInteractive(obj, room){
   const isNearest = state.nearestInteractive === obj;
 
   ctx.save();
-  ctx.globalAlpha = used ? 0.35 : 1;
+  ctx.globalAlpha = used ? 0.4 : 1;
+  
   if (isNearest){
     ctx.beginPath();
-    ctx.arc(wx, wy, 34 + 3*Math.sin(state.time*5), 0, 7);
+    ctx.arc(wx, wy, 34 + 3 * Math.sin(state.time * 2), 0, 7);
     ctx.strokeStyle = '#3ff0e0';
     ctx.lineWidth = 2;
+    ctx.shadowColor = '#3ff0e0';
+    ctx.shadowBlur = 10;
     ctx.stroke();
+    ctx.shadowBlur = 0;
   }
-  ctx.font = '30px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(obj.icon, wx, wy);
+
+  if (obj.kind === 'crate') {
+    ctx.fillStyle = '#7a828a'; // Metallic grey
+    ctx.fillRect(wx - 16, wy - 16, 32, 32);
+    ctx.strokeStyle = '#2a3038'; ctx.lineWidth = 2; ctx.strokeRect(wx - 16, wy - 16, 32, 32);
+    // Yellow-black warning stripes
+    ctx.fillStyle = '#ffb347';
+    ctx.fillRect(wx - 16, wy + 8, 32, 8);
+    ctx.fillStyle = '#1a1e24';
+    ctx.fillRect(wx - 16, wy + 12, 32, 4);
+    ctx.fillStyle = '#ffb347';
+    ctx.fillRect(wx - 16, wy - 16, 32, 8);
+    ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#000';
+    ctx.fillText(obj.icon, wx, wy);
+  } 
+  else if (obj.kind === 'terminal' || obj.name.includes('Terminal') || obj.name.includes('Mainframe')) {
+    ctx.fillStyle = '#2a3038'; // Dark grey
+    ctx.fillRect(wx - 18, wy - 14, 36, 28);
+    ctx.strokeStyle = '#1a1e24'; ctx.lineWidth = 2; ctx.strokeRect(wx - 18, wy - 14, 36, 28);
+    ctx.fillStyle = '#00f0ff'; // Glowing cyan screen
+    ctx.shadowColor = '#00f0ff'; ctx.shadowBlur = 10;
+    ctx.fillRect(wx - 12, wy - 8, 24, 16);
+    ctx.shadowBlur = 0;
+    ctx.font = '10px "Share Tech Mono", monospace'; ctx.fillStyle = '#05060a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('DATA', wx, wy);
+  } 
+  else if (room.id === 'MEDICAL_BAY' && obj.kind === 'collectible') {
+    ctx.fillStyle = '#e0e8f0'; // White/light grey medical
+    ctx.beginPath(); ctx.arc(wx, wy, 16, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#b0b8c0'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(obj.icon, wx, wy);
+  } 
+  else {
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath(); ctx.arc(wx, wy, 18, 0, 7); ctx.fill();
+    ctx.font = '24px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(obj.icon, wx, wy);
+  }
   ctx.restore();
 }
 
