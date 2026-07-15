@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Petri-Chor: Chapter 1 – Aurora Space Station</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div id="room-banner" class="hud-panel"></div>
+    <div id="mission-panel" class="hud-panel">
+      <h3>▶ CURRENT OBJECTIVE</h3>
+      <div class="objective" id="mission-text">Wake up and explore the station.</div>
+      <div class="step" id="mission-step">Step 1 / 11</div>
+    </div>
+    <div id="inventory-hud" class="hud-panel" onclick="UI.toggleInventory()">
+      🎒 <span id="inv-count">0</span> Items [B]
+    </div>
+    <div id="action-prompt" class="hud-panel">Press [E] to Interact</div>
+    <div id="notification" class="hud-panel"></div>
+  </div>
+
+  <!-- Minimap -->
+  <div id="minimap-container" class="hud-panel">
+    <canvas id="minimapCanvas" width="192" height="192"></canvas>
+  </div>
+
+  <!-- Inventory Modal -->
+  <div id="inventory-modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="UI.closeInventory()">CLOSE [ESC]</button>
+      <h2>🎒 INVENTORY</h2>
+      <div class="modal-section">
+        <h3>MISSION ITEMS</h3>
+        <div class="item-grid" id="mission-items"></div>
+      </div>
+      <div class="modal-section">
+        <h3>COLLECTIBLES</h3>
+        <div class="item-grid" id="collectibles"></div>
+      </div>
+      <div class="modal-section">
+        <h3>ACHIEVEMENTS</h3>
+        <div class="item-grid" id="achievements"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terminal Modal -->
+  <div id="terminal-modal">
+    <div class="modal-content terminal-style">
+      <button class="close-btn" onclick="UI.closeTerminal()">EXIT [ESC]</button>
+      <div id="terminal-header">AURORA TERMINAL v4.2.1</div>
+      <div id="terminal-body"></div>
+    </div>
+  </div>
+
+  <!-- Intro Cinematic -->
+  <div id="intro-screen">
+    <div class="intro-content">
+      <h1>PETRI-CHOR</h1>
+      <h2>CHAPTER 1 — AURORA SPACE STATION</h2>
+      <p class="intro-text">You wake up in the darkness of a derelict research station. The AI is offline. The crew is gone. Something went terribly wrong.</p>
+      <button id="start-btn" onclick="Game.start()">▶ BEGIN TRANSMISSION</button>
+    </div>
+  </div>
+
+  <!-- Mobile Controls -->
+  <div id="mobile-controls">
+    <div id="joystick-base">
+      <div id="joystick-knob"></div>
+    </div>
+    <button id="action-btn">E</button>
+    <button id="bag-btn">🎒</button>
+  </div>
+
+  <!-- Scripts (order matters!) -->
+  <script src="js/state.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/missions.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/save.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/mobile.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
