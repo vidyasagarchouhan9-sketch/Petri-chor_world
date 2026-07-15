@@ -605,12 +605,12 @@ function triggerEmergencyWarning(){
    RENDER
    --------------------------------------------------------------- */
 const COLORS = {
-  floor: '#7a828a',       // Medium metallic grey
-  floorCorridor: '#6b727a', // Opaque metallic grey for corridors
-  wall: '#3a414a',        // Dark steel grey
+  floor: '#7a828a',      
+  floorCorridor: '#6b727a', 
+  wall: '#3a414a',        
   wallGlow: '#3ff0e0',
-  reactor: '#6a4cff',     // Purple/blue energy glow
-  ai: '#00f0ff',          // Cyan futuristic
+  reactor: '#6a4cff',     
+  ai: '#00f0ff',          
   locked: '#ff3b5c',
   unlocked: '#3ff0e0',
   medical: '#e0e8f0',
@@ -619,15 +619,12 @@ const COLORS = {
 };
 
 function render(){
-  // Deep space background (now ONLY visible through window panels)
   ctx.fillStyle = '#05060a';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  // NOTE: Global drawStars() removed so stars don't bleed through walls/floors
 
   ctx.save();
   ctx.translate(canvas.width/2 - state.camera.x, canvas.height/2 - state.camera.y);
 
-  // Corridors: Completely opaque with subtle metallic grid
   for (const door of DOORS){
     if (door.secret && !doorVisible(door)) continue;
     const c = door.corridor;
@@ -673,7 +670,7 @@ function doorVisibleForRoom(room){
 }
 
 function drawRoom(r){
-  const pulse = 0.85 + 0.15 * Math.sin(state.time * 0.5); // Very slow, soft pulse (reduced blinking)
+  const pulse = 0.85 + 0.15 * Math.sin(state.time * 0.5); 
   
   // 1. Medium metallic grey floor
   ctx.fillStyle = COLORS.floor;
@@ -730,7 +727,7 @@ function drawRoom(r){
   ctx.fillStyle = ambientColor;
   ctx.fillRect(r.x, r.y, r.w, r.h);
 
-  // 5. Windows (Space view ONLY visible through these)
+  // 5. Windows 
   if (r.id === 'OBSERVATION_DECK' || r.id === 'CAFETERIA' || r.id === 'CENTRAL_HALL') {
     drawWindows(r);
   }
@@ -748,7 +745,7 @@ function drawRoom(r){
   ctx.textAlign = 'left';
   ctx.fillText(`${r.icon} ${r.name}`, r.x + 16, r.y + 26);
 
-  // 6. Reduced blinking decorative lights (only in critical rooms, very subtle)
+  // 6. Reduced blinking decorative lights 
   if (r.id === 'POWER_REACTOR' || r.id === 'AI_CORE' || r.id === 'COMMS_HUB') {
     for (let i = 0; i < 4; i++) {
       const bx = r.x + 20 + ((seed + i * 77) % (r.w - 40));
@@ -778,25 +775,25 @@ function drawRoom(r){
   
   if (r.id === 'AI_CORE'){
     const cx = r.x + r.w/2, cy = r.y + r.h/2;
-    ctx.fillStyle = '#05060a'; // Black core
+    ctx.fillStyle = '#05060a'; 
     ctx.beginPath(); ctx.arc(cx, cy, 50, 0, 7); ctx.fill();
     ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke();
-    ctx.strokeStyle = `rgba(0,240,255,${0.6+0.4*pulse})`; // Cyan futuristic rings
+    ctx.strokeStyle = `rgba(0,240,255,${0.6+0.4*pulse})`; 
     ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(cx, cy, 35, state.time, state.time + 4); ctx.stroke();
     ctx.beginPath(); ctx.arc(cx, cy, 45, -state.time*1.5, -state.time*1.5 + 3); ctx.stroke();
   }
 
   if (r.id === 'WORKSHOP') {
-    ctx.fillStyle = 'rgba(255, 149, 0, 0.15)'; // Orange industrial accents
+    ctx.fillStyle = 'rgba(255, 149, 0, 0.15)'; 
     ctx.fillRect(r.x + 10, r.y + 10, 20, r.h - 20);
     ctx.fillRect(r.x + r.w - 30, r.y + 10, 20, r.h - 20);
   }
 
   if (r.id === 'BIO_LAB') {
-    ctx.fillStyle = 'rgba(224, 232, 240, 0.1)'; // White panel
+    ctx.fillStyle = 'rgba(224, 232, 240, 0.1)'; 
     ctx.fillRect(r.x + 10, r.y + 10, r.w - 20, 20);
-    ctx.strokeStyle = COLORS.bio; ctx.lineWidth = 2; // Green accent
+    ctx.strokeStyle = COLORS.bio; ctx.lineWidth = 2; 
     ctx.strokeRect(r.x + 10, r.y + 10, r.w - 20, 20);
   }
 }
@@ -876,13 +873,13 @@ function drawSpaceView(x, y, w, h) {
 
   // Occasional satellite or asteroid
   const spaceObj = Math.sin(state.time * 0.3 + seed);
-  if (spaceObj > 0.85) { // Satellite
+  if (spaceObj > 0.85) { 
     const sx = x + (seed % w), sy = y + ((seed * 3) % h);
     ctx.fillStyle = '#8a929a';
     ctx.fillRect(sx - 4, sy - 2, 8, 4);
     ctx.fillRect(sx - 10, sy - 1, 4, 2);
     ctx.fillRect(sx + 6, sy - 1, 4, 2);
-  } else if (spaceObj < -0.85) { // Asteroid
+  } else if (spaceObj < -0.85) { 
     const ax = x + ((seed * 7) % w), ay = y + ((seed * 11) % h);
     ctx.fillStyle = '#4a4a4a';
     ctx.beginPath(); ctx.moveTo(ax, ay - 4); ctx.lineTo(ax + 5, ay - 2); ctx.lineTo(ax + 3, ay + 4); ctx.lineTo(ax - 4, ay + 3); ctx.lineTo(ax - 5, ay - 1); ctx.fill();
@@ -896,7 +893,7 @@ function drawDoor(door){
   const distToPlayer = Math.hypot(state.player.x - door.gate.x, state.player.y - door.gate.y);
   const openAmt = (!locked && distToPlayer < 150) ? Math.min(1, (150 - distToPlayer) / 90) : 0;
 
-  const baseColor = '#4a525a'; // Grey doors
+  const baseColor = '#4a525a'; 
   const glowColor = locked ? COLORS.locked : COLORS.unlocked;
   
   ctx.save();
@@ -924,7 +921,7 @@ function drawDoor(door){
   ctx.shadowBlur = 0;
 
   if (locked){
-    const sweep = (Math.sin(state.time * 1.5) + 1) / 2; // Slower scanner
+    const sweep = (Math.sin(state.time * 1.5) + 1) / 2;
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = COLORS.locked;
     if (horizontal) ctx.fillRect(-thickness/2, -leafLen + sweep * leafLen * 2 - 3, thickness, 6);
@@ -956,10 +953,9 @@ function drawInteractive(obj, room){
   }
 
   if (obj.kind === 'crate') {
-    ctx.fillStyle = '#7a828a'; // Metallic grey
+    ctx.fillStyle = '#7a828a'; 
     ctx.fillRect(wx - 16, wy - 16, 32, 32);
     ctx.strokeStyle = '#2a3038'; ctx.lineWidth = 2; ctx.strokeRect(wx - 16, wy - 16, 32, 32);
-    // Yellow-black warning stripes
     ctx.fillStyle = '#ffb347';
     ctx.fillRect(wx - 16, wy + 8, 32, 8);
     ctx.fillStyle = '#1a1e24';
@@ -970,10 +966,10 @@ function drawInteractive(obj, room){
     ctx.fillText(obj.icon, wx, wy);
   } 
   else if (obj.kind === 'terminal' || obj.name.includes('Terminal') || obj.name.includes('Mainframe')) {
-    ctx.fillStyle = '#2a3038'; // Dark grey
+    ctx.fillStyle = '#2a3038';
     ctx.fillRect(wx - 18, wy - 14, 36, 28);
     ctx.strokeStyle = '#1a1e24'; ctx.lineWidth = 2; ctx.strokeRect(wx - 18, wy - 14, 36, 28);
-    ctx.fillStyle = '#00f0ff'; // Glowing cyan screen
+    ctx.fillStyle = '#00f0ff';
     ctx.shadowColor = '#00f0ff'; ctx.shadowBlur = 10;
     ctx.fillRect(wx - 12, wy - 8, 24, 16);
     ctx.shadowBlur = 0;
@@ -981,7 +977,7 @@ function drawInteractive(obj, room){
     ctx.fillText('DATA', wx, wy);
   } 
   else if (room.id === 'MEDICAL_BAY' && obj.kind === 'collectible') {
-    ctx.fillStyle = '#e0e8f0'; // White/light grey medical
+    ctx.fillStyle = '#e0e8f0'; 
     ctx.beginPath(); ctx.arc(wx, wy, 16, 0, 7); ctx.fill();
     ctx.strokeStyle = '#b0b8c0'; ctx.lineWidth = 2; ctx.stroke();
     ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
