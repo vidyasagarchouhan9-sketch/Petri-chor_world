@@ -7,15 +7,35 @@
    ================================================================ */
 
 :root{
-  --void:#05060a;
-  --panel:#0d1117;
-  --panel2:#11161f;
-  --cyan:#3ff0e0;
-  --danger:#ff3b5c;
-  --warn:#ffb347;
-  --ai:#b26bff;
-  --ink:#dfefee;
-  --muted:#7e93a0;
+  --void: #05060a;
+  --panel: #3a414a;      /* Dark steel grey */
+  --panel2: #4a525a;     /* Medium metallic grey */
+  --cyan: #3ff0e0;
+  --danger: #ff3b5c;
+  --warn: #ffb347;
+  --ai: #00f0ff;         /* Brighter cyan for AI/terminals */
+  --ink: #e0e8f0;        /* Light grey/white for readability */
+  --muted: #9aa5b0;
+}
+
+/* Reduce excessive blinking: Slower, softer pulse for interact prompt */
+@keyframes promptPulse{ 
+  0%, 100% { box-shadow: 0 0 6px rgba(63,240,224,0.3); } 
+  50% { box-shadow: 0 0 12px rgba(63,240,224,0.5); } 
+}
+
+/* Softer alarm flash to match industrial aesthetic */
+body.alarm-flash::before{
+  content:''; position:fixed; inset:0; z-index:6; pointer-events:none;
+  background: radial-gradient(ellipse at center, rgba(255,59,92,0) 40%, rgba(255,59,92,0.25) 100%);
+  animation: alarmPulse 0.8s ease-in-out infinite alternate; /* Slowed from 0.5s */
+}
+@keyframes alarmPulse{ from{ opacity:0.3; } to{ opacity:0.8; } }
+
+/* Update minimap to match new metallic palette */
+#minimapCanvas{
+  background: rgba(42, 48, 56, 0.85); /* Dark steel grey tint */
+  border: 1px solid rgba(63,240,224,0.4);
 }
 
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
