@@ -1303,3 +1303,4 @@ document.getElementById('continueBtn').style.display = SaveSystem.hasSave() ? 'b
 
 renderMissionBanner();
 renderInventory();
+
