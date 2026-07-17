@@ -4,48 +4,192 @@ All rooms, doors, items, missions and achievements live here.
 Coordinates are in "world units" (px at 1:1 zoom).
 ================================================================ */
 const ROOMS = {
-CENTRAL_HALL:     { id:'CENTRAL_HALL',     name:'Central Hall',          icon:'🏛️', x:-300,  y:-250,  w:600, h:500, empty:false },
-CREW_QUARTERS:    { id:'CREW_QUARTERS',    name:'Crew Quarters',         icon:'🛏️', x:-800,  y:-150,  w:400, h:300, empty:false, start:true },
-MEDICAL_BAY:      { id:'MEDICAL_BAY',      name:'Medical Bay',           icon:'🏥', x:-800,  y:-550,  w:400, h:300, empty:false },
-DERELICT_QUARTERS:{ id:'DERELICT_QUARTERS',name:'Derelict Quarters',     icon:'🌑', x:-1300, y:-150,  w:400, h:300, empty:true  },
-CAFETERIA:        { id:'CAFETERIA',        name:'Cafeteria',             icon:'🍽️', x:-800,  y:150,   w:400, h:300, empty:false },
-BIO_LAB:          { id:'BIO_LAB',          name:'Bio Lab',               icon:'🧪', x:800,   y:250,   w:400, h:300, empty:false },
-CONTROL_ROOM:     { id:'CONTROL_ROOM',     name:'Control Room',          icon:'💻', x:800,   y:-150,  w:400, h:300, empty:false },
-AI_CORE:          { id:'AI_CORE',          name:'AI Core',               icon:'🤖', x:-150,  y:-850,  w:300, h:300, empty:false },
-OBSERVATION_DECK: { id:'OBSERVATION_DECK', name:'Observation Deck',      icon:'🔭', x:1300,  y:-150,  w:400, h:300, empty:false },
-STORAGE:          { id:'STORAGE',          name:'Storage',               icon:'📦', x:-200,  y:550,   w:400, h:300, empty:false },
-WORKSHOP:         { id:'WORKSHOP',         name:'Workshop',              icon:'🔧', x:-700,  y:550,   w:400, h:300, empty:false },
-COMMS_HUB:        { id:'COMMS_HUB',        name:'Communications Hub',    icon:'📡', x:800,   y:-550,  w:400, h:300, empty:false },
-EMPTY_ANNEX:      { id:'EMPTY_ANNEX',      name:'Disused Annex',         icon:'🌑', x:-700,  y:1050,  w:300, h:200, empty:true  },
-HIDDEN_VAULT:     { id:'HIDDEN_VAULT',     name:'Hidden Vault',          icon:'❓', x:-1200, y:1050,  w:400, h:300, empty:false, secret:true },
-ENGINE_ROOM:      { id:'ENGINE_ROOM',      name:'Engine Room',           icon:'⚙️', x:-200,  y:1050,  w:400, h:300, empty:false },
-POWER_REACTOR:    { id:'POWER_REACTOR',    name:'Power Reactor',         icon:'☢️', x:-200,  y:1550,  w:400, h:300, empty:false },
-AIRLOCK_DOCKING:  { id:'AIRLOCK_DOCKING',  name:'Airlock & Docking Bay', icon:'🚀', x:800,   y:1050,  w:400, h:300, empty:false },
+CENTRAL_HALL:{id:'CENTRAL_HALL',name:'Central Hall',icon:'🏛️',x:-300,y:-200,w:600,h:500,empty:false},
+
+CREW_QUARTERS:{id:'CREW_QUARTERS',name:'Crew Quarters',icon:'🛏️',x:-900,y:-200,w:400,h:300,empty:false,start:true},
+
+MEDICAL_BAY:{id:'MEDICAL_BAY',name:'Medical Bay',icon:'🏥',x:-900,y:-650,w:400,h:300,empty:false},
+
+DERELICT_QUARTERS:{id:'DERELICT_QUARTERS',name:'Derelict Quarters',icon:'🌑',x:-1400,y:-200,w:400,h:300,empty:true},
+
+CAFETERIA:{id:'CAFETERIA',name:'Cafeteria',icon:'🍽️',x:500,y:-200,w:400,h:300,empty:false},
+
+BIO_LAB:{id:'BIO_LAB',name:'Bio Lab',icon:'🧪',x:1000,y:-200,w:400,h:300,empty:false},
+
+OBSERVATION_DECK:{id:'OBSERVATION_DECK',name:'Observation Deck',icon:'🔭',x:1500,y:-200,w:400,h:300,empty:false},
+
+CONTROL_ROOM:{id:'CONTROL_ROOM',name:'Control Room',icon:'💻',x:-300,y:-850,w:400,h:300,empty:false},
+
+AI_CORE:{id:'AI_CORE',name:'AI Core',icon:'🤖',x:-300,y:-1350,w:400,h:300,empty:false},
+
+STORAGE:{id:'STORAGE',name:'Storage',icon:'📦',x:-300,y:500,w:400,h:300,empty:false},
+
+WORKSHOP:{id:'WORKSHOP',name:'Workshop',icon:'🔧',x:-900,y:500,w:400,h:300,empty:false},
+
+COMMS_HUB:{id:'COMMS_HUB',name:'Communications Hub',icon:'📡',x:500,y:500,w:400,h:300,empty:false},
+
+ENGINE_ROOM:{id:'ENGINE_ROOM',name:'Engine Room',icon:'⚙️',x:-300,y:1050,w:400,h:300,empty:false},
+
+POWER_REACTOR:{id:'POWER_REACTOR',name:'Power Reactor',icon:'☢️',x:-300,y:1550,w:400,h:300,empty:false},
+
+AIRLOCK_DOCKING:{id:'AIRLOCK_DOCKING',name:'Airlock & Docking Bay',icon:'🚀',x:500,y:1550,w:400,h:300,empty:false},
+
+EMPTY_ANNEX:{id:'EMPTY_ANNEX',name:'Disused Annex',icon:'🌑',x:1000,y:1050,w:300,h:200,empty:true},
+
+HIDDEN_VAULT:{id:'HIDDEN_VAULT',name:'Hidden Vault',icon:'❓',x:-1400,y:500,w:400,h:300,empty:false,secret:true},
 };
 
 /* Doors: each connects two rooms via a corridor rect (walkable area) and
 sits at a single point (the gate). locked doors block the corridor
 until `requires` is satisfied (an item id and/or a minimum mission step). */
 const DOORS = [
-{ id:'d1',  a:'CENTRAL_HALL', b:'CREW_QUARTERS',     gate:{x:-350, y:0},    corridor:{x:-400, y:-80,  w:100, h:160} },
-{ id:'d2',  a:'CREW_QUARTERS',b:'MEDICAL_BAY',       gate:{x:-600, y:-200}, corridor:{x:-680, y:-250, w:160, h:100} },
-{ id:'d3',  a:'CREW_QUARTERS',b:'DERELICT_QUARTERS', gate:{x:-850, y:0},    corridor:{x:-900, y:-80,  w:100, h:160} },
-{ id:'d4',  a:'CENTRAL_HALL', b:'CAFETERIA',         gate:{x:-350, y:250},  corridor:{x:-400, y:170,  w:100, h:160} },
-{ id:'d5',  a:'CAFETERIA',    b:'BIO_LAB',           gate:{x:0,    y:500},  corridor:{x:-800, y:420,  w:1600, h:160} },
-{ id:'d6',  a:'CAFETERIA',    b:'CONTROL_ROOM',      gate:{x:0,    y:150},  corridor:{x:-400, y:70,   w:1200, h:160},
-locked:true, requires:{item:'ID_CARD'} },
-{ id:'d7',  a:'CONTROL_ROOM', b:'AI_CORE',           gate:{x:400,  y:-500}, corridor:{x:150,  y:-580, w:650, h:160},
-locked:true, requires:{item:'DATA_DRIVE', step:9} },
-{ id:'d8',  a:'CAFETERIA',    b:'OBSERVATION_DECK',  gate:{x:450,  y:0},    corridor:{x:-400, y:-80,  w:1700, h:160} },
-{ id:'d9',  a:'CENTRAL_HALL', b:'STORAGE',           gate:{x:-100, y:400},  corridor:{x:-180, y:250,  w:160, h:300} },
-{ id:'d10', a:'STORAGE',      b:'WORKSHOP',          gate:{x:-250, y:700},  corridor:{x:-300, y:620,  w:100, h:160} },
-{ id:'d11', a:'STORAGE',      b:'COMMS_HUB',         gate:{x:200,  y:0},    corridor:{x:120,  y:-250, w:160, h:800} },
-{ id:'d12', a:'STORAGE',      b:'EMPTY_ANNEX',       gate:{x:-50,  y:950},  corridor:{x:-130, y:850,  w:160, h:200} },
-{ id:'d13', a:'WORKSHOP',     b:'HIDDEN_VAULT',      gate:{x:-550, y:950},  corridor:{x:-630, y:850,  w:160, h:200},
-locked:true, secret:true, requires:{flag:'vaultUnlocked'} },
-{ id:'d14', a:'CENTRAL_HALL', b:'ENGINE_ROOM',       gate:{x:100,  y:650},  corridor:{x:20,   y:250,  w:160, h:800} },
-{ id:'d15', a:'ENGINE_ROOM',  b:'POWER_REACTOR',     gate:{x:0,    y:1450}, corridor:{x:-80,  y:1350, w:160, h:200} },
-{ id:'d16', a:'ENGINE_ROOM',  b:'AIRLOCK_DOCKING',   gate:{x:500,  y:1200}, corridor:{x:200,  y:1120, w:600, h:160} },
+
+/* Left Wing */
+{
+id:'d1',
+a:'CENTRAL_HALL',
+b:'CREW_QUARTERS',
+gate:{x:-500,y:-50},
+corridor:{x:-520,y:-90,w:120,h:180}
+},
+
+{
+id:'d2',
+a:'CREW_QUARTERS',
+b:'MEDICAL_BAY',
+gate:{x:-700,y:-350},
+corridor:{x:-760,y:-390,w:120,h:180}
+},
+
+{
+id:'d3',
+a:'CREW_QUARTERS',
+b:'DERELICT_QUARTERS',
+gate:{x:-1100,y:-50},
+corridor:{x:-1160,y:-90,w:120,h:180}
+},
+
+/* Right Wing */
+
+{
+id:'d4',
+a:'CENTRAL_HALL',
+b:'CAFETERIA',
+gate:{x:300,y:-50},
+corridor:{x:280,y:-90,w:120,h:180}
+},
+
+{
+id:'d5',
+a:'CAFETERIA',
+b:'BIO_LAB',
+gate:{x:900,y:-50},
+corridor:{x:880,y:-90,w:120,h:180}
+},
+
+{
+id:'d6',
+a:'BIO_LAB',
+b:'OBSERVATION_DECK',
+gate:{x:1400,y:-50},
+corridor:{x:1380,y:-90,w:120,h:180}
+},
+
+/* Upper Wing */
+
+{
+id:'d7',
+a:'CENTRAL_HALL',
+b:'CONTROL_ROOM',
+gate:{x:0,y:-550},
+corridor:{x:-60,y:-650,w:120,h:260},
+locked:true,
+requires:{item:'ID_CARD'}
+},
+
+{
+id:'d8',
+a:'CONTROL_ROOM',
+b:'AI_CORE',
+gate:{x:0,y:-1050},
+corridor:{x:-60,y:-1120,w:120,h:240},
+locked:true,
+requires:{item:'DATA_DRIVE',step:9}
+},
+
+/* Lower Wing */
+
+{
+id:'d9',
+a:'CENTRAL_HALL',
+b:'STORAGE',
+gate:{x:0,y:350},
+corridor:{x:-60,y:280,w:120,h:240}
+},
+
+{
+id:'d10',
+a:'STORAGE',
+b:'ENGINE_ROOM',
+gate:{x:0,y:900},
+corridor:{x:-60,y:820,w:120,h:240}
+},
+
+{
+id:'d11',
+a:'ENGINE_ROOM',
+b:'POWER_REACTOR',
+gate:{x:0,y:1450},
+corridor:{x:-60,y:1370,w:120,h:220}
+},
+
+{
+id:'d12',
+a:'POWER_REACTOR',
+b:'AIRLOCK_DOCKING',
+gate:{x:300,y:1700},
+corridor:{x:220,y:1640,w:280,h:120}
+},
+
+/* Storage Side Rooms */
+
+{
+id:'d13',
+a:'STORAGE',
+b:'WORKSHOP',
+gate:{x:-500,y:650},
+corridor:{x:-560,y:610,w:120,h:180}
+},
+
+{
+id:'d14',
+a:'STORAGE',
+b:'COMMS_HUB',
+gate:{x:300,y:650},
+corridor:{x:280,y:610,w:120,h:180}
+},
+
+/* Secret */
+
+{
+id:'d15',
+a:'WORKSHOP',
+b:'HIDDEN_VAULT',
+gate:{x:-1100,y:650},
+corridor:{x:-1160,y:610,w:120,h:180},
+locked:true,
+secret:true,
+requires:{flag:'vaultUnlocked'}
+},
+
+{
+id:'d16',
+a:'ENGINE_ROOM',
+b:'EMPTY_ANNEX',
+gate:{x:600,y:1150},
+corridor:{x:520,y:1110,w:280,h:120}
+}
+
 ];
 
 /* Mission / collectible items */
@@ -65,37 +209,37 @@ SAMPLE:      { id:'SAMPLE',      name:'Alien Sample',   icon:'🧬', mission:fal
 /* Interactive objects placed inside rooms. Positions are offsets from the
 room's top-left corner. */
 const INTERACTIVES = [
-{ id:'crewLocker', room:'CREW_QUARTERS', x:60,  y:60,  icon:'🗄️', label:'Personal Locker',
+{ id:'crewLocker', room:'CREW_QUARTERS', x:60,  y:40,  icon:'🗄️', label:'Personal Locker',
 kind:'locker', locked:false, note:'A dented locker with your name half-scratched off.' },
-{ id:'crewCrate',  room:'CREW_QUARTERS', x:330, y:220, icon:'📦', label:'Supply Crate', kind:'crate' },
-{ id:'medScanner', room:'MEDICAL_BAY', x:200, y:60, icon:'🩻', label:'Medical Scanner', kind:'flavor',
+{ id:'crewCrate',  room:'CREW_QUARTERS', x:310, y:220, icon:'📦', label:'Supply Crate', kind:'crate' },
+{ id:'medScanner', room:'MEDICAL_BAY', x:180, y:40, icon:'🩻', label:'Medical Scanner', kind:'flavor',
 note:'Vitals nominal. You have been asleep for 47 days.' },
 { id:'medCrate',   room:'MEDICAL_BAY', x:60,  y:220,icon:'📦', label:'Medical Crate', kind:'crate' },
 { id:'cafCrate',   room:'CAFETERIA', x:60, y:220, icon:'📦', label:'Ration Crate', kind:'crate' },
-{ id:'cafLog',     room:'CAFETERIA', x:330,y:60,  icon:'📺', label:'Wall Terminal', kind:'log',
+{ id:'cafLog',     room:'CAFETERIA', x:320,y:40,  icon:'📺', label:'Wall Terminal', kind:'log',
 note:'LOG: "Day 12. The coffee machine gained sentience. It refuses to make decaf. Send help."' },
-{ id:'bioTerminal',room:'BIO_LAB', x:60, y:60, icon:'💻', label:'Bio Terminal', kind:'flavor',
+{ id:'bioTerminal',room:'BIO_LAB', x:180, y:40, icon:'💻', label:'Bio Terminal', kind:'flavor',
 note:'Culture samples show unusual crystalline growth patterns.' },
 { id:'bioCrate',   room:'BIO_LAB', x:330,y:220, icon:'📦', label:'Sample Case', kind:'crate' },
-{ id:'ctrlTerminal', room:'CONTROL_ROOM', x:200, y:150, icon:'💻', label:'Control Terminal', kind:'hackTerminal' },
-{ id:'aiConsole',  room:'AI_CORE', x:200, y:150, icon:'🤖', label:'AI Core Console', kind:'aiConsole' },
-{ id:'telescope',  room:'OBSERVATION_DECK', x:200, y:60, icon:'🔭', label:'Telescope', kind:'flavor',
+{ id:'ctrlTerminal', room:'CONTROL_ROOM', x:180, y:120, icon:'💻', label:'Control Terminal', kind:'hackTerminal' },
+{ id:'aiConsole',  room:'AI_CORE', x:150, y:120, icon:'🤖', label:'AI Core Console', kind:'aiConsole' },
+{ id:'telescope',  room:'OBSERVATION_DECK', x:180, y:40, icon:'🔭', label:'Telescope', kind:'flavor',
 note:'Through the eyepiece: a thousand unblinking stars, and something moving between them.' },
 { id:'obsBadge',   room:'OBSERVATION_DECK', x:60, y:220, icon:'🏅', label:'Something glinting', kind:'collectible', item:'BADGE' },
-{ id:'storageLocker', room:'STORAGE', x:200, y:150, icon:'🔒', label:'Maintenance Locker', kind:'locker',
+{ id:'storageLocker', room:'STORAGE', x:180, y:70, icon:'🔒', label:'Maintenance Locker', kind:'locker',
 locked:true, requires:'WRENCH', gives:'ID_CARD' },
-{ id:'panel',      room:'STORAGE', x:20, y:280, icon:'🔘', label:'Loose Wall Panel', kind:'secretSwitch' },
-{ id:'toolbench',  room:'WORKSHOP', x:200, y:150, icon:'🛠️', label:'Tool Bench', kind:'give', gives:'WRENCH' },
-{ id:'serverRack', room:'COMMS_HUB', x:200, y:150, icon:'🖥️', label:'Server Rack', kind:'serverRack' },
+{ id:'panel',      room:'STORAGE', x:20, y:250, icon:'🔘', label:'Loose Wall Panel', kind:'secretSwitch' },
+{ id:'toolbench',  room:'WORKSHOP', x:170, y:120, icon:'🛠️', label:'Tool Bench', kind:'give', gives:'WRENCH' },
+{ id:'serverRack', room:'COMMS_HUB', x:170, y:120, icon:'🖥️', label:'Server Rack', kind:'serverRack' },
 { id:'annexDuck',  room:'EMPTY_ANNEX', x:150, y:150, icon:'🦆', label:'Something small', kind:'collectible', item:'DUCK' },
 { id:'vaultRock',  room:'HIDDEN_VAULT', x:150, y:150, icon:'🪨', label:'Odd Rock', kind:'collectible', item:'ROCK' },
 { id:'vaultLog',   room:'HIDDEN_VAULT', x:330, y:60, icon:'📺', label:'Old Terminal', kind:'log',
 note:'LOG: "If you found this room, congratulations. The cake was a lie anyway."' },
-{ id:'engConsole', room:'ENGINE_ROOM', x:60, y:60, icon:'🔧', label:'Maintenance Console', kind:'flavor',
+{ id:'engConsole', room:'ENGINE_ROOM', x:50, y:40, icon:'🔧', label:'Maintenance Console', kind:'flavor',
 note:'Engine output stable. Someone left a wrench-shaped dent in the panel.' },
-{ id:'engCrate',   room:'ENGINE_ROOM', x:330,y:220,icon:'📦', label:'Parts Crate', kind:'crate' },
-{ id:'reactorConsole', room:'POWER_REACTOR', x:200, y:150, icon:'☢️', label:'Reactor Console', kind:'reactor' },
-{ id:'dockConsole', room:'AIRLOCK_DOCKING', x:200, y:150, icon:'🚀', label:'Docking Console', kind:'ending' },
+{ id:'engCrate',   room:'ENGINE_ROOM', x:300,y:220,icon:'📦', label:'Parts Crate', kind:'crate' },
+{ id:'reactorConsole', room:'POWER_REACTOR', x:180, y:120, icon:'☢️', label:'Reactor Console', kind:'reactor' },
+{ id:'dockConsole', room:'AIRLOCK_DOCKING', x:180, y:120, icon:'🚀', label:'Docking Console', kind:'ending' },
 { id:'derelictTeddy', room:'DERELICT_QUARTERS', x:150, y:150, icon:'🧸', label:'Something soft', kind:'collectible', item:'TEDDY' },
 ];
 
