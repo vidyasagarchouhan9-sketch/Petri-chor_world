@@ -507,20 +507,15 @@ function playTeaserCinematic(){
     'Somewhere past the debris field, a second signal repeats itself...',
     'CHAPTER 2: DEEP SIGNAL',
     'TO BE CONTINUED...',
-  ], () => { returnToMainMenuAfterEnding(); }, {className:'cine-teaser', speed:34});
+  ], () => { redirectToCertificate(); }, {className:'cine-teaser', speed:34});
 }
 
-function returnToMainMenuAfterEnding(){
+function redirectToCertificate(){
   const fade = document.getElementById('fadeOverlay');
   fade.classList.add('show');
   setTimeout(() => {
-    document.querySelectorAll('.fullscreen-menu').forEach(m => m.classList.remove('open'));
-    document.getElementById('mainMenu').classList.add('open');
-    document.getElementById('continueBtn').style.display = SaveSystem.hasSave() ? 'block' : 'none';
-    state.screen = 'menu';
-    notify('Thanks for playing!', 'info');
-    setTimeout(() => fade.classList.remove('show'), 300);
-  }, 900);
+    window.location.href = 'certificate.html';
+  }, 90);
 }
 
 /* ---------------------------------------------------------------
