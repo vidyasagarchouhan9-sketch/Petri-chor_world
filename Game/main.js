@@ -8,7 +8,7 @@ const mmCanvas = document.getElementById('minimapCanvas');
 const mmCtx = mmCanvas.getContext('2d');
 
 const playerImg = new Image();
-playerImg.src = 'assets/walk.png';
+playerImg.src = 'walk.png';
 const PLAYER_SPRITE_H = 74;
 const PLAYER_SPRITE_W = PLAYER_SPRITE_H * (194/299); // native aspect ratio of walk.png
 
