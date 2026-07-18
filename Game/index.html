@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PETRI-CHOR: Chapter 1 – Aurora Space Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="gameCanvas"></canvas>
+<canvas id="minimapCanvas" width="180" height="150"></canvas>
+<div id="fadeOverlay"></div>
+
+<!-- ============ HUD ============ -->
+<div id="hud">
+  <div id="missionBanner">
+    <div class="mission-row">
+      <span class="mission-label">OBJECTIVE</span>
+      <span id="missionTitle">1. Wake Up</span>
+    </div>
+    <div id="missionDesc">Get your bearings in Crew Quarters.</div>
+    <div id="missionDots"></div>
+  </div>
+
+  <div id="roomBanner"></div>
+
+  <div id="interactPrompt" style="display:none;">[E] Interact</div>
+
+  <button id="bagBtn" title="Inventory (B)">🎒</button>
+  <button id="pauseBtn" title="Pause (Esc)">☰</button>
+</div>
+
+<div id="notifications"></div>
+<div id="achievementLayer"></div>
+<pre id="debugOverlay"></pre>
+
+<!-- ============ Inventory panel ============ -->
+<div id="inventoryBackdrop"></div>
+<div id="inventoryPanel">
+  <div class="panel-header">
+    <span>🎒 Inventory</span>
+    <span class="hint">[B] toggle</span>
+    <button id="invCloseBtn" title="Close">✕</button>
+  </div>
+  <div id="inventoryGrid"></div>
+</div>
+
+<!-- ============ Touch controls ============ -->
+<div id="touchControls">
+  <div id="joystickBase"><div id="joystickKnob"></div></div>
+  <button id="actionBtn">⚡<br><span>Interact</span></button>
+</div>
+
+<!-- ============ Cinematic overlay ============ -->
+<div id="cinematicOverlay">
+  <div id="cinematicBox">
+    <p id="cinematicText"></p>
+    <button id="cinematicSkip">Skip ▶</button>
+  </div>
+</div>
+
+<!-- ============ Main menu ============ -->
+<div id="mainMenu" class="fullscreen-menu open">
+  <div class="menu-panel">
+    <h1 class="title-logo">PETRI-CHOR</h1>
+    <p class="subtitle">Chapter 1 — Aurora Space Station</p>
+    <button id="newGameBtn" class="menu-btn primary">New Game</button>
+    <button id="continueBtn" class="menu-btn">Continue</button>
+    <button id="instructionsBtn" class="menu-btn">Instructions</button>
+    <button id="creditsBtn" class="menu-btn">Credits</button>
+    <div class="settings-row">
+      <label><input type="checkbox" id="musicToggle" checked> Music</label>
+      <label><input type="checkbox" id="sfxToggle" checked> SFX</label>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Instructions ============ -->
+<div id="instructionsScreen" class="fullscreen-menu">
+  <div class="menu-panel wide">
+    <h2>How to Play</h2>
+    <div class="instructions-grid">
+      <div>
+        <h3>🖥️ PC Controls</h3>
+        <ul>
+          <li><b>WASD</b> or <b>Arrow Keys</b> — Move</li>
+          <li><b>E</b> — Interact</li>
+          <li><b>B</b> — Toggle Bag</li>
+          <li><b>Esc</b> — Pause / Close</li>
+          <li><b>`</b> — Debug overlay</li>
+        </ul>
+      </div>
+      <div>
+        <h3>📱 Mobile Controls</h3>
+        <ul>
+          <li><b>Joystick</b> (bottom-left) — Move</li>
+          <li><b>⚡ Interact</b> button (bottom-right)</li>
+          <li><b>🎒</b> — Open bag</li>
+          <li><b>☰</b> — Pause menu</li>
+        </ul>
+      </div>
+      <div>
+        <h3>🎯 Goal</h3>
+        <p>Wake up alone on the derelict station. Explore every room, gather tools and
+        clearance items, hack the mainframe, and restore the station AI —
+        then reach the Airlock &amp; Docking Bay to complete your escape.</p>
+      </div>
+      <div>
+        <h3>💡 Tips</h3>
+        <p>Locked doors glow red and need a specific item. Crates and lockers may hold
+        useful gear or just collectibles. Some rooms hide secrets — look closely.</p>
+      </div>
+    </div>
+    <button class="menu-btn back-to-menu">Back</button>
+  </div>
+</div>
+
+<!-- ============ Credits ============ -->
+<div id="creditsScreen" class="fullscreen-menu">
+  <div class="menu-panel">
+    <h2>Credits</h2>
+    <p class="credits-text">
+      PETRI-CHOR: Chapter 1 — Aurora Space Station<br><br>
+      Design &amp; Code — You &amp; Claude<br>
+      Sound — procedurally generated, zero audio files<br>
+      Built with HTML5 Canvas &amp; vanilla JavaScript<br><br>
+      Thanks for playing. Chapter 2 coming soon...
+    </p>
+    <button class="menu-btn back-to-menu">Back</button>
+  </div>
+</div>
+
+<!-- ============ Pause menu ============ -->
+<div id="pauseMenu">
+  <div class="menu-panel">
+    <h2>Paused</h2>
+    <button id="resumeBtn" class="menu-btn primary">Resume</button>
+    <button id="saveBtn" class="menu-btn">Save Game</button>
+    <button id="loadBtn" class="menu-btn">Load Game</button>
+    <button id="quitBtn" class="menu-btn">Quit to Menu</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/save.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
