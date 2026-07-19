@@ -496,7 +496,14 @@ Notification.requestPermission().then(async(permission)=>{
             vapidKey:"BIybH-9Zax1gsJwIWAUAjLPjaJntxc16i47YbcNaBv-Dv3FwZg5GhbL-0E_Iyr6ZuNpa7shYZ3htQ3h3hJJpzXw"
         });
 
-        alert(token);
+        if (token) {
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `<textarea style="width:100%;height:120px">${token}</textarea>`
+  );
+} else {
+  alert("No token received");
+        }
     }
 });
     
