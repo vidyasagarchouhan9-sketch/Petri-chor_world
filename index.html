@@ -513,17 +513,7 @@ Notification.requestPermission().then(async (permission) => {
   }
 });
 
-        if (token) {
-  document.body.insertAdjacentHTML(
-    "beforeend",
-    `<textarea style="width:100%;height:120px">${token}</textarea>`
-  );
-} else {
-  alert("No token received");
-        }
-    }
-});
-    
+      
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
