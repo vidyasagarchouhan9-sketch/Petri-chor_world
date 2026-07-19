@@ -38,8 +38,6 @@ button {
 
 <div class="chat-box">
 
-<div id="messages"></div>
-
 <input id="name" placeholder="Your name">
 <br>
 
@@ -55,34 +53,7 @@ button {
 const SUPABASE_URL = "https://fsasedzkypyucdrnvyvw.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzYXNlZHpreXB5dWNkcm52eXZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1OTA5ODcsImV4cCI6MjA5OTE2Njk4N30.mDGLBxu4wFoQytx7aMb95NlHyfUbFNRyE_C8EsmkBV0";
 
-async function loadMessages(){
 
-let response = await fetch(
-SUPABASE_URL + "/rest/v1/messages?select=*",
-{
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY
-}
-});
-
-let data = await response.json();
-
-let box = document.getElementById("messages");
-
-box.innerHTML="";
-
-data.forEach(msg=>{
-box.innerHTML += `
-<p>
-<b>${msg.name}</b>: ${msg.message}
-</p>
-`;
-});
-
-}
-
-loadMessages();
   
 async function sendMessage(){
 
@@ -109,7 +80,6 @@ console.log(result);
 
 if(response.ok){
 alert("Message sent 🚀");
-loadMessages();
 }else{
 alert("Error:\n"+result);
 }
