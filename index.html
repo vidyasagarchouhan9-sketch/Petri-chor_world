@@ -464,19 +464,29 @@
     }
   </script>
 
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "30df8047-20e4-4746-b475-185504611108",
-      safari_web_id: "web.onesignal.auto.2c2f7f93-c22c-4405-a44b-05589b796f38",
-      notifyButton: {
-        enable: true,
-      },
-    });
-  });
-</script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCcowY_FOYnXUGIb8HqPT2X6Bwp62Rq1s8",
+    authDomain: "petri-chor-world.firebaseapp.com",
+    projectId: "petri-chor-world",
+    storageBucket: "petri-chor-world.firebasestorage.app",
+    messagingSenderId: "380703206428",
+    appId: "1:380703206428:web:e312d344e50689949183d9",
+    measurementId: "G-C0S8GYJ24R"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>
