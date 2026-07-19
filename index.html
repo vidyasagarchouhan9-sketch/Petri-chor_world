@@ -490,11 +490,28 @@ import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/fireb
   const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 
-Notification.requestPermission().then(async(permission)=>{
-    if(permission==="granted"){
-        const token = await getToken(messaging,{
-            vapidKey:"BIybH-9Zax1gsJwIWAUAjLPjaJntxc16i47YbcNaBv-Dv3FwZg5GhbL-0E_Iyr6ZuNpa7shYZ3htQ3h3hJJpzXw"
-        });
+Notification.requestPermission().then(async (permission) => {
+  if (permission === "granted") {
+
+    const registration = await navigator.serviceWorker.register(
+      "/Petri-chor_world/firebase-messaging-sw.js"
+    );
+
+    const token = await getToken(messaging, {
+      vapidKey: "BIybH-9Zax1gsJwIWAUAjLPjaJntxc16i47YbcNaBv-Dv3FwZg5GhbL-0E_Iyr6ZuNpa7shYZ3htQ3h3hJJpzXw",
+      serviceWorkerRegistration: registration
+    });
+
+    if (token) {
+      document.body.insertAdjacentHTML(
+        "beforeend",
+        `<textarea style="width:100%;height:120px">${token}</textarea>`
+      );
+    } else {
+      alert("No token received");
+    }
+  }
+});
 
         if (token) {
   document.body.insertAdjacentHTML(
